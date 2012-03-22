@@ -372,6 +372,17 @@ jQuery("#360link-reset ul li a").click(function() {
 		
 	if(clicks > 1) {
 		jQuery(".doc-del-tooltip").show();
+		//lets also grap the openURL we are passing to the browser and pass it off
+		//to a PHP script that will write it elsewhere, so it can be checked
+		var URL = jQuery("div#ArticleCL a").attr('href');
+		jQuery.ajax({
+			type: "POST"
+			data: {URL : URL},
+			dataType: "text",
+			url: "url_write.php"
+		
+		});
+		
 	}
 	
 });
