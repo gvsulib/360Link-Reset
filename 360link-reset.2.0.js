@@ -15,6 +15,7 @@ var DatabaseNamedata = "";
 var DatabaseLinkdata = "";
 var clicks = 0;
 var refinerlink = jQuery("#RefinerLink0 a").attr("href");
+var hasPrint = false;
 
 // The following are special links created by Serials Solutions for us. These can guide you in adding your own
 var illiadLink = jQuery("table.CandyWrapper:last a.AnchorButton:contains('Document Delivery')").attr("href");
@@ -54,9 +55,12 @@ if (format === "Journal" || format === "JournalFormat") {
 	var citationDiv = '<span id="CitationJournalAuthorValue">' + authorName + '</span>&nbsp; <span id="CitationJournalDateValue">(' + journalDate + ')</span>.&nbsp; <span id="CitationJournalArticleValue">' + articleName + '.</span>&nbsp; <span id="CitationJournalTitleValue">' + journalName + '.</span>&nbsp;' + journalVol +  journalIssue + journalPages;
 
 	// Replace the final table with semantic HTML, along with the dynamic links
-		
 	// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
+var journalTitleEncode = encodeURI(journalName);	
+
 var nextstepsLink = '<li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Document Delivery</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+
+
 
 }
 
@@ -187,7 +191,7 @@ TopDatabaseName = jQuery.trim(DatabaseNames[0]);
 if(TopDatabaseName === "Print at GVSU Libraries") {
 	
 var topResultdiv = '<ul id="top-result"><li><a href="' + journalLinks[0] + '" class="article-button" target="_blank">Find a Copy</a> in <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a></li></ul>';
-	
+var hasPrint = true;	
 } else {
 
 var topResultdiv = '<ul id="top-result"><li><a href="' + journalLinks[0] + '" class="article-button" target="_blank">Browse the Journal Online</a> in <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a></li></ul>';
@@ -236,10 +240,11 @@ if(articleLinks[i] !== "NA") { // Article link - article has to be online
 	
 	
 	if(jQuery.trim(DatabaseNames[i]) === "Print at GVSU Libraries") { // Item is in print
-		
+		var hasPrint = true;
 		if(printAdditionalResults === "") { // First online article listed, add the header
 
 			printAdditionalResults = printAdditionalResults + "<h4>Print</h4><ul>";
+			
 
 		}
 		
@@ -288,6 +293,7 @@ if(results === "") { // Item is not available online or in print
 	
 	var Resultdiv = '<div id="ContentNotAvailableTable"><p class="lib-big-text">We&#8217;re sorry, but this item is not available online.</p><p>Think this is an error? Let our eResources team know at <a href="mailto:erms@gvsu.edu">erms@gvsu.edu</a>.</p></div>';
 	
+
 }
 
 // Idiot div
@@ -354,6 +360,10 @@ var pairvalues = query.split("&");
 
 if(pairvalues[0] !== "?SS_Page=refiner") { // Don't rewrite the page if this is the citation form
 
+//check and see if there are print holdings.  if not, show a "search the catlog" link
+
+if (hasPrint != true && (format === "Journal" || format === "JournalFormat")) {nextstepsLink = '<li class="appeasement"><a href="http://library.catalog.gvsu.edu/search/s' + journalTitleEncode + '">Search the Library Catalog for this journal</a></li>' + nextstepsLink;};
+
 jQuery("#360link-reset").html('<div id="page-content" style="margin: 0; padding-left: 6em; width:85%;"><h2 style="text-align:left;">You are looking for:</h2><div id="citation">' + citationDiv + '&nbsp;<a href="' + refinerlink + '"><img src="http://gvsu.edu/icon/pencil.png" alt="Edit this Citation" /></a><a id="refworks" href="' + refworksLink + '">Export to Refworks</a></div>' + Resultdiv + '<div id="next-step"><ul>' + nextstepsLink + '</ul></div></div><div class="clear"></div><!-- Begin Custom GVSU Footer code --></div>');
 
 }
@@ -372,7 +382,7 @@ jQuery("#360link-reset ul li a").click(function() {
 		
 	if(clicks > 1) {
 		jQuery(".doc-del-tooltip").show();
-		//lets also grap the openURL we are passing to the browser and pass it off
+		//lets also grab the openURL we are passing to the browser and pass it off
 		//to a PHP script that will write it elsewhere, so it can be checked
 		var link = jQuery(this).attr('href');
 		var msg;
