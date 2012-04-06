@@ -392,7 +392,7 @@ jQuery("#360link-reset ul li a").click(function() {
 		jQuery.ajax({
 		dataType: "string",
 		type: "GET",
-		url: "url_write.php",
+		url: "http://gvsulib.com/labs/js/url_write.php",
 		data: link
 		});
 		
