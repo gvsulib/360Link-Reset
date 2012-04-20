@@ -376,6 +376,8 @@ jQuery(".doc-del-tooltip").hide();
 
 // Now let's count clicks
 
+
+
 jQuery("#360link-reset ul li a").click(function() {
 	
 	clicks = clicks + 1;
@@ -384,16 +386,18 @@ jQuery("#360link-reset ul li a").click(function() {
 		jQuery(".doc-del-tooltip").show();
 		//lets also grab the openURL we are passing to the browser and pass it off
 		//to a PHP script that will write it elsewhere, so it can be checked
-		var link = jQuery(this).attr('href');
-		var msg;
-		link = encodeURIComponent(link);
-		link = "URL=" + link;
-
+		var link = "URL=" + encodeURIComponent(window.location);
+		var date = encodeURIComponent(new Date());
+		var DBname = "name=" + encodeURIComponent(jQuery(this).siblings("a.SS_DatabaseHyperLink").text());
+		
+		var datastring = "date=" + date + "&" + DBname + "&" + link;
+		
+		alert(datastring);
 		jQuery.ajax({
 		dataType: "string",
 		type: "GET",
 		url: "url_write.php",
-		data: link
+		data: datastring
 		});
 		
 		
