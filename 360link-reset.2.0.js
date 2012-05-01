@@ -17,6 +17,13 @@ var clicks = 0;
 var refinerlink = jQuery("#RefinerLink0 a").attr("href");
 var hasPrint = false;
 
+//define variables for capturing faulty URLs
+
+var link = "";
+var DBname = "";
+var ts = 0;	
+var datastring = "";
+
 // The following are special links created by Serials Solutions for us. These can guide you in adding your own
 var illiadLink = jQuery("table.CandyWrapper:last a.AnchorButton:contains('Document Delivery')").attr("href");
 var refworksLink = jQuery("table.CandyWrapper:last a.AnchorButton:last").attr("href");
@@ -381,25 +388,23 @@ jQuery(".doc-del-tooltip").hide();
 jQuery("#360link-reset ul li a").click(function() {
 	
 	clicks = clicks + 1;
-		
+	link = encodeURIComponent(window.location);
+	DBname = encodeURIComponent(jQuery(this).siblings("a.SS_DatabaseHyperLink").text());
+	ts = Math.round((new Date()).getTime() / 1000);	
+	datastring = datastring + ts + "," + DBname + "," + link + "\n";
 	if(clicks > 1) {
 		jQuery(".doc-del-tooltip").show();
 		//lets also grab the openURL we are passing to the browser and pass it off
 		//to a PHP script that will write it elsewhere, so it can be checked
-		var link = "URL=" + encodeURIComponent(window.location);
-		var date = encodeURIComponent(new Date());
-		var DBname = "name=" + encodeURIComponent(jQuery(this).siblings("a.SS_DatabaseHyperLink").text());
 		
-		var datastring = "date=" + date + "&" + DBname + "&" + link;
-		
-		alert(datastring);
+		datastring = "data=" + datastring;
 		jQuery.ajax({
 		dataType: "string",
-		type: "GET",
+		type: "POST",
 		url: "url_write.php",
 		data: datastring
 		});
-		
+		datastring = "";
 		
 		
 	}
