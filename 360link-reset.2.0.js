@@ -400,9 +400,15 @@ jQuery("#360link-reset ul li a").click(function() {
 		datastring = "data=" + datastring;
 		jQuery.ajax({
 		dataType: "string",
+<<<<<<< HEAD
 		type: "POST",
 		url: "url_write.php",
 		data: datastring
+=======
+		type: "GET",
+		url: "http://gvsulib.com/labs/js/url_write.php",
+		data: link
+>>>>>>> 5cf90045221b75590c9142370bf919842a18d72e
 		});
 		datastring = "";
 		
