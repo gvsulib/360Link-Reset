@@ -1,7 +1,22 @@
+<?
+session_start();
+if (!isset($_SESSION['username'])) {
+	header("Location: https://login.ezproxy.gvsu.edu/login?url=https://login.ezproxy.gvsu.edu/userObject?service=getToken&returnURL=http://gvsulib.com/felkerk/360Link_Reset/login.php");
+
+} else {
+	$user = trim($_SESSION['username']);
+	
+	if ($user != 'felkerk' && $user != 'simons') {
+	echo "You suck";
+	die;
+	} 
+
+}
 
 
 
 
+?>
 
 <!DOCTYPE html>
 <html>
