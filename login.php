@@ -27,7 +27,9 @@ $_SESSION['username'] = $user;
 
 session_write_close(); // Make sure the session variable is written before the redirect
 
-$new_url = "http://gvsulib.com/felkerk/360Link_Reset/display.php"; // URL of the app you are signing into
+$path_parts = pathinfo($_SERVER['SCRIPT_NAME']);  
+
+$new_url = "http://" .  $_SERVER['SERVER_NAME'] . $path_parts['dirname'] . "/display.php"; // URL of the app you are signing into
 
 header('Location: ' . $new_url);
 
