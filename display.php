@@ -1,13 +1,17 @@
 <?
 session_start();
 if (!isset($_SESSION['username'])) {
-	header("Location: https://login.ezproxy.gvsu.edu/login?url=https://login.ezproxy.gvsu.edu/userObject?service=getToken&returnURL=http://gvsulib.com/felkerk/360Link_Reset/login.php");
+
+	$path_parts = pathinfo($_SERVER['SCRIPT_NAME']);  
+
+	$header = "Location: https://login.ezproxy.gvsu.edu/login?url=https://login.ezproxy.gvsu.edu/userObject?service=getToken&returnURL=http://" . $_SERVER['SERVER_NAME'] . $path_parts['dirname'] . "/login.php";
+	header($header);
 
 } else {
 	$user = trim($_SESSION['username']);
 	
 	if ($user != 'felkerk' && $user != 'simons') {
-	echo "You suck";
+	echo "<P color='red'>You are not authorized, sucka.</P>";
 	die;
 	} 
 
@@ -170,6 +174,7 @@ load our pattern library to style the page
 
 <h2>Dodgy Link Display</h2>
 View Enties From:
+
 <P>
 <form action="" method="GET">
 <label for="start_date">Start Date</label>
