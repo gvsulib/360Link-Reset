@@ -121,6 +121,28 @@ var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bo
 	
 }
 
+// Dissertation
+
+if (format === "Dissertation" || format === "DissertationFormat") {
+	
+		var dissTitle = jQuery("td#CitationDissertationTitleValue").text();
+		dissTitle = jQuery.trim(dissTitle); // Trim leading white space form book title
+		var dissDate = jQuery("td#CitationDissertationDateValue").text();
+		dissDate = jQuery.trim(dissDate); // Trim leading white space form journal name
+	
+		// Ok, let's get rid of that table and replace it with a semantic div for our citation
+
+		var citationDiv = '<span id="CitationDissAuthorValue">' + authorName + '</span>&nbsp; <span id="CitationBookDateValue">(' + dissDate + ')</span>.&nbsp; <span id="CitationBookTitleValue"><em>' + dissTitle + '</em></span>';
+
+		// Replace the final table with semantic HTML, along with the dynamic links
+
+
+		// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
+	var dissTitleLink = encodeURI(dissTitle); // Encode the white space in the URL
+	var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + dissTitleLink + '">Search the GVSU Catalog for this dissertation</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+	
+}
+
 // Get information about displayed results and build results list
 
 jQuery("table#JournalLinkTable").find("tr").each(function(index) { // Grab values from the results table
@@ -400,21 +422,12 @@ jQuery("#360link-reset ul li a").click(function() {
 		datastring = "data=" + datastring;
 		jQuery.ajax({
 		dataType: "string",
-<<<<<<< HEAD
 		type: "POST",
 		url: "url_write.php",
 		data: datastring
-=======
-		type: "GET",
-		url: "http://gvsulib.com/labs/js/url_write.php",
-		data: link
->>>>>>> 5cf90045221b75590c9142370bf919842a18d72e
-		});
-		datastring = "";
-		
-		
-	}
-	
+	});
+		datastring = "";		
+	}	
 });
 
 });
