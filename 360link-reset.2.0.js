@@ -73,7 +73,7 @@ var nextstepsLink = '<li>Not Available Online? <a href="' + illiadLink + '">Orde
 
 // Books
 
-if (format === "BookFormat") {
+if (format === "BookFormat" || format === "Book") {
 	
 	var bookTitle = jQuery("td#CitationBookTitleValue").text();
 	bookTitle = jQuery.trim(bookTitle); // Trim leading white space form book title
@@ -98,7 +98,7 @@ var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bo
 
 // Unknown format - treat as book?
 
-if (format === "UnknownFormat") {
+if (format === "UnknownFormat" || format === "Unknown") {
 	
 	var bookTitle = jQuery("td#CitationUnknownPublicationValue").text();
 	bookTitle = jQuery.trim(bookTitle); // Trim leading white space form book title
