@@ -143,6 +143,24 @@ if (format === "Dissertation" || format === "DissertationFormat") {
 	
 }
 
+// Patent
+
+if (format === "Patent" || format === "PatentFormat") {
+
+	var patentTitle = jQuery("td#CitationPatentTitleValue").text();
+	patentTitle = jQuery.trim(patentTitle);  //Trim leading white space from patent title
+	var patentDate = jQuery("td#CitationPatentInventorDateValue").text();
+	patentDate = jQuery.trim(patentDate);  //Trim leading white space from patent date
+	authorName = jQuery("td#CitationPatentInventorValue").text();
+	authorName = jQuery.trim(authorName);
+
+	var patentTitleLink = encodeURI(patentTitle);
+	var nextstepsLink = '<li><a href="http://www.google.com/?tbm=pts#tbm=pts&q=' + dissTitleLink + '">Search the Google Patents for this patent.</a></li><li>Not Available Online? <a href="' + illiadLink + '">Submit a request.</a></li>';
+  
+	
+	var citationDiv = '<span id="CitationPatentInventorValue">' + authorName + '</span>&nbsp; <span id="CitationPatentInventorDateValue">(' + patentDate + ')</span>.&nbsp; <span id="CitationPatentTitleValue"><em>' + patentTitle + '</em></span>';
+}
+
 // Get information about displayed results and build results list
 
 jQuery("table#JournalLinkTable").find("tr").each(function(index) { // Grab values from the results table
