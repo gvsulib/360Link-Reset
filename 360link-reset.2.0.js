@@ -1,21 +1,220 @@
 
-jQuery(document).ready(function() {
+
+// Set up preferences for Link Resolver
 
 
-// Since 360Link loads Prototype, need to use the jQuery prefix instead of $ 
-// to avoid conflicts with Prototype.
+
+// Date format used by 360Link. Set to true if MM/DD/YYYY, false if DD/MM/YYYY
+var timeformat = true;
+
+// SEARCH CATALOG LINK - Works with Millennium
+// -------------------------------------------
+// Use catalog link when no print holdings exist in SS?
+var catalog = true;
+// Base path to Illiad
+var catalogPath = 'http://library.catalog.gvsu.edu/';
+
+// CONSORTIAL CATALOG LINK - Works with Millennium
+// -------------------------------------------
+// Use interlibrary loan link?
+var consort = true;
+// Base path to Illiad
+var consortLink = 'http://elibrary.mel.org/';
+
+// ILLIAD INTERLIBRARY LOAN LINK
+// -------------------------------------------
+// Use interlibrary loan link?
+var ill = true;
+// Base path to Illiad
+var illPath = 'https://gvsu.illiad.oclc.org/';
+
+// REFWORKS LINK
+// -------------------------------------------
+// Use Refworks link?
+var refWorks = true;
+
+// ERROR REPORTING 
+// -------------------------------------------
+// Show tech support email?
+var errorEmail = true;
+// Tech support email
+var errorEmailAddress = "erms@gvsu.edu";
+// Use automated error reporting? (See the README for additional setup)
+var autoErrorReporting = true;
+
+// --------------------------------------------------------
+// DON'T EDIT BELOW THIS UNLESS YOU KNOW WHAT YOU'RE DOING
+// --------------------------------------------------------
+
+// Get rid of crummy default styles and add our classy ones
+
+
+// Functions for building the citations and OpenURL links
+
+// Get the path of this script
+var scripts= document.getElementsByTagName('script');
+var path= scripts[scripts.length-1].src.split('?')[0];      // remove any ?query
+var mydir= path.split('/').slice(0, -1).join('/')+'/';
+
+// Define variables
+var citeValue, classValue, results, articleLinksdata, journalLinksdata, dateRangedata, DatabaseNamedata, DatabaseLinkdata;
+var hasPrint = false;
+
+// Convert format to the type used in div ids and classes
+var formatArray = format.split("Format");
+var formatKey = formatArray[0].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+
+// Function to parse citation information from the page
+
+function getCite(field) {
+
+	citeValue = undefined;
+
+	if(formatKey === 'Unknown' & field === 'Title') {
+		field = 'Publication';
+	}
+
+	if(formatKey === 'Patent' & field === 'Date') {
+		field = 'InventorDate';
+	}
+
+	var citeCell = document.getElementById("Citation" + formatKey + field + "Value");
+	if(typeof citeValue !== 'undefined') {
+		citeValue = citeCell.querySelector("div").innerHTML;
+		return citeValue;
+	}
+}
+
+// Function to parse article citation values from the URL for building links to Refworks and Illiad
+
+function getUrlVars() {
+
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    if(typeof vars !== 'undefined') {
+    	return vars;
+    } else {
+    	return false;
+    }
+}
+
+// Function to parse human readable dates into MySQL dates for the links to Refworks and Illiad
+
+function dateToSQL() {
+
+	var hrdate = getCite("Date");
+
+	if(typeof hrdate !== 'undefined') {
+
+		var dateArray = hrdate.split("/");
+
+		if(timeformat == true ) { // American Style Dates
+			return dateArray[2] + '-' + dateArray[0] + '-' + dateArray[1];
+		} else { // European style dates
+			return dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0];
+		}	
+
+	} else {
+
+		var dateArray = "";
+		return dateArray;
+
+	}
+}
+
+//Author Information
+
+var authorFullName = getCite("Author");
+
+if(typeof authorFullName !== 'undefined') {
+	var authorNames = authorFullName.split(", ");
+	var aufirst = authorNames[1];
+	var aulast = authorNames[0];
+} else {
+	var aufirst = "";
+	var aulast = "";
+}
+
+// Function to get items from URL and then check for whether they are defined or not
+function buildUrl(sourceKey) {
+	var keyVal = getUrlVars()[sourceKey];
+	if(typeof keyVal === 'undefined') {
+		return keyVal = "";
+	} else {
+		return keyVal;
+	}
+}
+
+// Build the base link for the export URL (Refworks, Illiad)
+var ExportURLLink = 'sid=' + buildUrl("rft_id") + '&amp;genre=' + buildUrl("rft.genre") + '&amp;aufirst=' + encodeURIComponent(aufirst) + '&amp;aulast=' + encodeURIComponent(aulast) + '&amp;title=' + buildUrl("Title") + '&amp;atitle=' + buildUrl("rft.atitle") + '&amp;volume=' + buildUrl("rft.volume") + '&amp;issue=' + buildUrl("rft.issue") + '&amp;date=' + dateToSQL() + '&amp;issn=' + buildUrl("rft.issn") + '&amp;isbn=' + buildUrl("rft.isbn") + '&amp;spage=' + buildUrl("rft.spage") + '&amp;epage=' + buildUrl("rft.epage");
+
+// Build the citation
+
+// First, grab the refiner link
+var refinerContainer = document.getElementById("RefinerLink0");
+var refinerLink = refinerContainer.querySelector("a").href;
+
+// Junk for testing
+var link = '<h1><a href="http://www.refworks.com/express/expressimport.asp?' + ExportURLLink + '">Document Delivery</a></h1>';
+document.getElementById("CitationResults").innerHTML = link;
+
+// Build new page. Broke this up for readability and to simplify conditional statements.
+
+var 360LinkPage;
+
+// Add the citation
+360LinkPage = 360LinkPage + '<div class="line"><div class="span1 unit">';
+360LinkPage = 360LinkPage + '<h3>You are Looking For:</h3>';
+360LinkPage = 360LinkPage + '<div class="vcard" id="citation">';
+if(aulast !== "") {	
+	360LinkPage = 360LinkPage + '<span class="fn" id="Citation' + formatKey + 'AuthorValue">' + aulast + ', ' + aufirst + '. </span>';
+}
+if(getCite("Date") !== "") {	
+	360LinkPage = 360LinkPage + '<time datetime="' + dateToSQL() + '">(' + getCite("Date") + '). </time>';
+}
+if(getCite("Article") !== "") {	
+	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'ArticleValue">' + getCite("Article") + '. </span>';
+}
+if(getCite("Title") !== "") {	
+	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'TitleValue"><i>' + getCite("Title") + '</i>. </span>';
+}
+if(getCite("Title") !== "") {	
+	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'TitleValue"><i>' + getCite("Title") + '</i>. </span>';
+}
+if(getCite("Volume") !== "") {	
+	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'VolumeValue">' + getCite("Volume") + '</span>';
+}
+if(getCite("Issue") !== "") {	
+	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'IssueValue">(' + getCite("Issue") + ')</span>';
+} else {
+	360LinkPage = 360LinkPage + '. ';
+}
+if(getCite("Page") !== "") {	
+	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'PageValue">p. ' + getCite("Page") + ').</span>';
+}
+360LinkPage = 360LinkPage + '&nbsp;<a href="' + refinerLink + '"><img src="' + mydir + 'img/pencil.png" alt="Edit this Citation" />&nbsp;</a>';
+if(refworks === true) {
+	360LinkPage = 360LinkPage + '<span id="RefWorksLink">&nbsp;<a href="http://www.refworks.com/express/expressimport.asp?' + ExportURLLink + '" id="refworks">Refworks</a>&nbsp;';
+}
+360LinkPage = 360LinkPage + '</div></div>';
+
+
+
+
+
 
 jQuery("head link").remove(); // Remove existing styles
 
-var results = ""; 
-var articleLinksdata = "";
-var journalLinksdata = "";
-var dateRangedata = "";
-var DatabaseNamedata = "";
-var DatabaseLinkdata = "";
+
+
+
+
+
+
 var clicks = 0;
-var refinerlink = jQuery("#RefinerLink0 a").attr("href");
-var hasPrint = false;
+
 
 //define variables for capturing faulty URLs
 
