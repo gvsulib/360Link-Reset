@@ -10,6 +10,8 @@ jQuery("head link").remove(); // Remove existing styles
 var results = ""; 
 var articleLinksdata = "";
 var journalLinksdata = "";
+var BookLinksdata = "";
+console.log(BookLinksdata);
 var dateRangedata = "";
 var DatabaseNamedata = "";
 var DatabaseLinkdata = "";
@@ -24,6 +26,9 @@ var DBname = "";
 var ts = 0;	
 var datastring = "";
 
+var currentUrl = encodeURIComponent(document.URL);
+
+
 // The following are special links created by Serials Solutions for us. These can guide you in adding your own
 var illiadLink = jQuery("table.CandyWrapper:last a.AnchorButton:contains('Document Delivery')").attr("href");
 var refworksLink = jQuery("table.CandyWrapper:last a.AnchorButton:last").attr("href");
@@ -31,7 +36,7 @@ var melLink = jQuery("table.CandyWrapper:last a.AnchorButton:contains('MeLCat')"
 
 // Build the citation
 
-var authorName = jQuery("span.fn").text();
+var authorName = jQuery("span.fn:first").text();
 authorName = jQuery.trim(authorName); // Trim leading white space form author name
 
 // Journals
@@ -60,12 +65,14 @@ if (format === "Journal" || format === "JournalFormat") {
 	// Ok, let's get rid of that table and replace it with a semantic div for our citation
 
 	var citationDiv = '<span id="CitationJournalAuthorValue">' + authorName + '</span>&nbsp; <span id="CitationJournalDateValue">(' + journalDate + ')</span>.&nbsp; <span id="CitationJournalArticleValue">' + articleName + '.</span>&nbsp; <span id="CitationJournalTitleValue">' + journalName + '.</span>&nbsp;' + journalVol +  journalIssue + journalPages;
-
+var illForm = 'an electronic copy';
+	var illTime = '1 &#8211; 3 days';
+	var prcForm = 'articles';
 	// Replace the final table with semantic HTML, along with the dynamic links
 	// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
 var journalTitleEncode = encodeURI(journalName);	
 
-var nextstepsLink = '<li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Document Delivery</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+var nextstepsLink = '<li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Document Delivery</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20' + currentUrl + '">Let our crack team of link fixers know</a>!</li>';
 
 
 
@@ -92,7 +99,7 @@ if (format === "BookFormat" || format === "Book") {
 	
 	// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
 var bookTitleLink = encodeURI(bookTitle); // Encode the white space in the URL
-var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '">Search the GVSU Catalog for this book</a></li><li><a href="' + melLink + '">Order from another Michigan library</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '">Search the GVSU Catalog for this book</a></li><li><a href="' + melLink + '">Order from another Michigan library</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20' + currentUrl + '">Let our crack team of link fixers know</a>!</li>';
 	
 }
 
@@ -117,7 +124,7 @@ if (format === "UnknownFormat" || format === "Unknown") {
 	
 	// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
 var bookTitleLink = encodeURI(bookTitle); // Encode the white space in the URL
-var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '">Search the GVSU Catalog for this book</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '">Search the GVSU Catalog for this book</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20' + currentUrl + '">Let our crack team of link fixers know</a>!</li>';
 	
 }
 
@@ -139,7 +146,7 @@ if (format === "Dissertation" || format === "DissertationFormat") {
 
 		// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
 	var dissTitleLink = encodeURI(dissTitle); // Encode the white space in the URL
-	var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + dissTitleLink + '">Search the GVSU Catalog for this dissertation</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+	var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + dissTitleLink + '">Search the GVSU Catalog for this dissertation</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20' + currentUrl + '">Let our crack team of link fixers know</a>!</li>';
 	
 }
 
@@ -193,7 +200,10 @@ jQuery("table#JournalLinkTable").find("tr").each(function(index) { // Grab value
 
 			journalLinksdata = journalLinksdata + "NA|||";
 
+			console.log(journalLinksdata);
+
 		}
+
 		
 		// Get the date range
 		
@@ -213,25 +223,71 @@ jQuery("table#JournalLinkTable").find("tr").each(function(index) { // Grab value
 		
 		DatabaseLinkdata = DatabaseLinkdata + newDBLink + "|||";
 					
-	}
+	} 
+				results = index; // Get total number of results
+				BookLinksdata = "NA|||";
+});
+
+if(results === "") {
+
+jQuery("table#BookLinkTable").find("tr").each(function(index) { // Grab values from the results table
 	
-	results = index; // Get total number of results
+	if(index !== 0) {
+
+		if(jQuery(this).find("#BookCL a").length > 0) { // There is a book link
+
+			var newHref = jQuery(this).find("#BookCL a").attr("href");
+			//console.log(BookLinksdata);
+			BookLinksdata = BookLinksdata + newHref + "|||";
+
+		} else { // No book link
+
+			BookLinksdata = BookLinksdata + "NA|||";
+
+		}
+
+		// Get the date range
+		
+		var newDates = jQuery(this).find("#DateCL").text();
+		
+		dateRangedata = dateRangedata + newDates + "|||";
+		
+		// Get the database name
+		
+		var newDBName = jQuery(this).find("#DatabaseCL").text();
+		
+		DatabaseNamedata = DatabaseNamedata + newDBName + "|||";
+		
+		// Get the database link
+		
+		var newDBLink = jQuery(this).find("#DatabaseCL a").attr("href");
+		
+		DatabaseLinkdata = DatabaseLinkdata + newDBLink + "|||";
+	}
+				results = index; // Get total number of results
+
 		
 });
+	}
+
+
 
 // Bust apart arrays into variabls we can call
 
 var articleLinks = articleLinksdata.split("|||");
 var journalLinks = journalLinksdata.split("|||");
+var BookLinks = BookLinksdata.split("|||");
 var dateRange = dateRangedata.split("|||");
 var DatabaseNames = DatabaseNamedata.split("|||");
 var DatabaseLinks = DatabaseLinkdata.split("|||");
 
 var additionalLinksnum = results - 1; // Number of links in the additional results list
 
-if((articleLinks[0] === "NA") && (journalLinks[0] !== "NA")) { // There was no article link, but there is a journal link
+if((articleLinks[0] === "NA") && (BookLinks[0] === "NA")) { // There was no article link, but there is a journal link
 	
 TopDatabaseName = jQuery.trim(DatabaseNames[0]);
+	console.log('Journal:' + journalLinks[0]);
+
 	
 // Check to see if top result is a print journal
 
@@ -243,9 +299,23 @@ var hasPrint = true;
 
 var topResultdiv = '<ul id="top-result"><li><a href="' + journalLinks[0] + '" class="article-button" target="_blank">Browse the Journal Online</a> in <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a></li></ul>';
 
-}} else { // There is an article link
+}} else { 
+
+	console.log('Article:' + articleLinks[0]);
+
+
+	if((BookLinks[0] !== "NA") && (BookLinksdata !== "")) { // Book Link
+
+		var topResultdiv = '<ul id="top-result"><li><a href="' + BookLinks[0] + '" class="article-button" target="_blank">Full Text Online</a> from <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a> <a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p><a href="' + journalLinks[0] + '" style="text-decoration: none;">Browse Journal</a></p><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[0] + '</p></div></li></ul>';
+
+
+	} else { // Article link
+
+		var topResultdiv = '<ul id="top-result"><li><a href="' + articleLinks[0] + '" class="article-button" target="_blank">Full Text Online</a> from <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a> <a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p><a href="' + journalLinks[0] + '" style="text-decoration: none;">Browse Journal</a></p><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[0] + '</p></div></li></ul>';
+	}
+
+// There is an article link
 		
-var topResultdiv = '<ul id="top-result"><li><a href="' + articleLinks[0] + '" class="article-button" target="_blank">Full Text Online</a> from <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a> <a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p><a href="' + journalLinks[0] + '" style="text-decoration: none;">Browse Journal</a></p><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[0] + '</p></div></li></ul>';
 	
 }
 
@@ -288,7 +358,7 @@ if(articleLinks[i] !== "NA") { // Article link - article has to be online
 	
 	if(jQuery.trim(DatabaseNames[i]) === "Print at GVSU Libraries") { // Item is in print
 		var hasPrint = true;
-		if(printAdditionalResults === "") { // First online article listed, add the header
+		if(printAdditionalResults === "") { // First print article listed, add the header
 
 			printAdditionalResults = printAdditionalResults + "<h4>Print</h4><ul>";
 			
@@ -305,7 +375,13 @@ if(articleLinks[i] !== "NA") { // Article link - article has to be online
 
 		}
 		
-		onlineAdditionalResults = onlineAdditionalResults + '<li><a href="' + journalLinks[i] + '" target="_blank">Browse the Journal Online</a> in <a href="' + DatabaseLinks[i] + '" class="SS_DatabaseHyperLink">' + DatabaseNames[i] + '</a><a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[i] + '</p></div></li>';
+		if((journalLinks[i] === "NA") && (BookLinks[i] !== "NA")) {
+		onlineAdditionalResults = onlineAdditionalResults + '<li><a href="' + BookLinks[i] + '" target="_blank">Browse the Journal Online</a> in <a href="' + DatabaseLinks[i] + '" class="SS_DatabaseHyperLink">' + DatabaseNames[i] + '</a><a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[i] + '</p></div></li>';
+
+		} else {
+					onlineAdditionalResults = onlineAdditionalResults + '<li><a href="' + journalLinks[i] + '" target="_blank">Browse the Journal Online</a> in <a href="' + DatabaseLinks[i] + '" class="SS_DatabaseHyperLink">' + DatabaseNames[i] + '</a><a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[i] + '</p></div></li>';
+
+		}
 		
 	}
 }
@@ -338,8 +414,7 @@ var Resultdiv = topResultdiv;
 
 if(results === "") { // Item is not available online or in print
 	
-	var Resultdiv = '<div id="ContentNotAvailableTable"><p class="lib-big-text">We&#8217;re sorry, but this item is not available online.</p><p>Think this is an error? Let our eResources team know at <a href="mailto:erms@gvsu.edu">erms@gvsu.edu</a>.</p></div>';
-	
+	var Resultdiv = '<div id="ContentNotAvailableTable"><p class="lib-big-text">We&#8217;re sorry, but this item is not available online. <small style="font-size: .7em !important; font-weight: normal !important;"><i><a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20' + currentUrl + '">Think this is wrong?</a></i></small></p></div> <div class="line"> <div class="span2 unit left"> <h4>Need This Item?</h4> <p style="font-size:1.2em;">We&#8217;ll get you ' + illForm + ' in ' + illTime + '.</p> <p><a href="' + illiadLink + '" class="lib-button-grey">Order a Copy</a></p> </div> <div class="span2 unit left lastUnit"> <h4>Need Research Help?</h4> <p style="font-size:1.2em;">Meet with a peer consultant to find similar ' + prcForm + '.</p> <p><a href="http://gvsu.edu/library/prc" class="lib-button-grey">Make an Appointment</a></p> </div> </div>';	
 
 }
 
@@ -411,7 +486,9 @@ if(pairvalues[0] !== "?SS_Page=refiner") { // Don't rewrite the page if this is 
 
 if (hasPrint != true && (format === "Journal" || format === "JournalFormat")) {nextstepsLink = '<li class="appeasement"><a href="http://library.catalog.gvsu.edu/search/s' + journalTitleEncode + '">Search the Library Catalog for this journal</a></li>' + nextstepsLink;};
 
-jQuery("#360link-reset").html('<div id="page-content" style="margin: 0; padding-left: 6em; width:85%;"><h2 style="text-align:left;">You are looking for:</h2><div id="citation">' + citationDiv + '&nbsp;<a href="' + refinerlink + '"><img src="http://gvsu.edu/icon/pencil.png" alt="Edit this Citation" /></a><a id="refworks" href="' + refworksLink + '">Export to Refworks</a></div>' + Resultdiv + '<div id="next-step"><ul>' + nextstepsLink + '</ul></div></div><div class="clear"></div><!-- Begin Custom GVSU Footer code --></div>');
+jQuery(".360link-reset").html('<h2 style="text-align:left;">You are looking for:</h2><div id="citation">' + citationDiv + '&nbsp;<a href="' + refinerlink + '"><img src="http://gvsu.edu/icon/pencil.png" alt="Edit this Citation" /></a><a id="refworks" href="' + refworksLink + '">Export to Refworks</a></div>' + Resultdiv + '<div id="next-step"><ul>' + nextstepsLink + '</ul></div></div><div class="clear"></div><!-- Begin Custom GVSU Footer code -->');
+
+jQuery("#360link-reset").html('<div id="page-content" style="margin: 0; width: 85%;"><h2 style="text-align:left;">You are looking for:</h2><div id="citation">' + citationDiv + '&nbsp;<a href="' + refinerlink + '"><img src="http://gvsu.edu/icon/pencil.png" alt="Edit this Citation" /></a><a id="refworks" href="' + refworksLink + '">Export to Refworks</a></div>' + Resultdiv + '<div id="next-step"><ul>' + nextstepsLink + '</ul></div></div><div class="clear"></div><!-- Begin Custom GVSU Footer code --></div>');
 
 }
 
