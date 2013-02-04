@@ -11,14 +11,14 @@ var timeformat = true;
 // -------------------------------------------
 // Use catalog link when no print holdings exist in SS?
 var catalog = true;
-// Base path to Illiad
+// Base path to Millennium OPAC
 var catalogPath = 'http://library.catalog.gvsu.edu/';
 
 // CONSORTIAL CATALOG LINK - Works with Millennium
 // -------------------------------------------
-// Use interlibrary loan link?
+// Use consortial catalog link for loanables?
 var consort = true;
-// Base path to Illiad
+// Base path to Consortial Catalog
 var consortLink = 'http://elibrary.mel.org/';
 
 // ILLIAD INTERLIBRARY LOAN LINK
@@ -60,15 +60,13 @@ var mydir= path.split('/').slice(0, -1).join('/')+'/';
 var citeValue, classValue, results, articleLinksdata, journalLinksdata, dateRangedata, DatabaseNamedata, DatabaseLinkdata;
 var hasPrint = false;
 
-// Convert format to the type used in div ids and classes
+// Convert existing JS variable 'format' to the type used in div ids and classes
 var formatArray = format.split("Format");
 var formatKey = formatArray[0].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 
 // Function to parse citation information from the page
 
 function getCite(field) {
-
-	citeValue = undefined;
 
 	if(formatKey === 'Unknown' & field === 'Title') {
 		field = 'Publication';
@@ -77,10 +75,10 @@ function getCite(field) {
 	if(formatKey === 'Patent' & field === 'Date') {
 		field = 'InventorDate';
 	}
-
+	
 	var citeCell = document.getElementById("Citation" + formatKey + field + "Value");
-	if(typeof citeValue !== 'undefined') {
-		citeValue = citeCell.querySelector("div").innerHTML;
+	if(typeof citeCell !== 'undefined') {
+		var citeValue = citeCell.querySelector("div").innerHTML;
 		return citeValue;
 	}
 }
@@ -156,53 +154,54 @@ var ExportURLLink = 'sid=' + buildUrl("rft_id") + '&amp;genre=' + buildUrl("rft.
 var refinerContainer = document.getElementById("RefinerLink0");
 var refinerLink = refinerContainer.querySelector("a").href;
 
-// Junk for testing
-var link = '<h1><a href="http://www.refworks.com/express/expressimport.asp?' + ExportURLLink + '">Document Delivery</a></h1>';
-document.getElementById("CitationResults").innerHTML = link;
-
 // Build new page. Broke this up for readability and to simplify conditional statements.
 
-var 360LinkPage;
 
-// Add the citation
-360LinkPage = 360LinkPage + '<div class="line"><div class="span1 unit">';
-360LinkPage = 360LinkPage + '<h3>You are Looking For:</h3>';
-360LinkPage = 360LinkPage + '<div class="vcard" id="citation">';
+// Add the
+var LinkPage = '<div class="line"><div class="span1 unit">';
+LinkPage = LinkPage + '<h3>You are Looking For:</h3>';
+LinkPage = LinkPage + '<div class="vcard" id="citation">';
 if(aulast !== "") {	
-	360LinkPage = 360LinkPage + '<span class="fn" id="Citation' + formatKey + 'AuthorValue">' + aulast + ', ' + aufirst + '. </span>';
+	LinkPage = LinkPage + '<span class="fn" id="Citation' + formatKey + 'AuthorValue">' + aulast + ', ' + aufirst + '. </span>';
 }
-if(getCite("Date") !== "") {	
-	360LinkPage = 360LinkPage + '<time datetime="' + dateToSQL() + '">(' + getCite("Date") + '). </time>';
+if(typeof getCite("Date") !== "undefined") {	
+	LinkPage = LinkPage + '<time datetime="' + dateToSQL() + '">(' + getCite("Date") + '). </time>';
 }
-if(getCite("Article") !== "") {	
-	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'ArticleValue">' + getCite("Article") + '. </span>';
+if(typeof buildUrl("rft.atitle") !== "undefined") {	
+	var articleTitle = buildUrl("rft.atitle");
+	articleTitle = decodeURIComponent(articleTitle.replace(/\+/g," "));
+	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'ArticleValue">' + articleTitle + '. </span>';
 }
-if(getCite("Title") !== "") {	
-	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'TitleValue"><i>' + getCite("Title") + '</i>. </span>';
-}
-if(getCite("Title") !== "") {	
-	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'TitleValue"><i>' + getCite("Title") + '</i>. </span>';
+if(typeof getCite("Title") !== "undefined") {	
+	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'TitleValue"><i>' + getCite("Title") + '</i>. </span>';
 }
 if(getCite("Volume") !== "") {	
-	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'VolumeValue">' + getCite("Volume") + '</span>';
+	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'VolumeValue">' + getCite("Volume") + '</span>';
 }
 if(getCite("Issue") !== "") {	
-	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'IssueValue">(' + getCite("Issue") + ')</span>';
+	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'IssueValue">(' + getCite("Issue") + ')</span>';
 } else {
-	360LinkPage = 360LinkPage + '. ';
+	LinkPage = LinkPage + '. ';
 }
 if(getCite("Page") !== "") {	
-	360LinkPage = 360LinkPage + '<span id="Citation' + formatKey + 'PageValue">p. ' + getCite("Page") + ').</span>';
+	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'PageValue">p. ' + getCite("Page") + ').</span>';
 }
-360LinkPage = 360LinkPage + '&nbsp;<a href="' + refinerLink + '"><img src="' + mydir + 'img/pencil.png" alt="Edit this Citation" />&nbsp;</a>';
-if(refworks === true) {
-	360LinkPage = 360LinkPage + '<span id="RefWorksLink">&nbsp;<a href="http://www.refworks.com/express/expressimport.asp?' + ExportURLLink + '" id="refworks">Refworks</a>&nbsp;';
+LinkPage = LinkPage + '&nbsp;<a href="' + refinerLink + '">Edit</a>&nbsp;';
+if(refWorks === true) {
+	LinkPage = LinkPage + '<span id="RefWorksLink">&nbsp;<a href="http://www.refworks.com/express/expressimport.asp?' + ExportURLLink + '" id="refworks">Refworks</a>&nbsp;';
 }
-360LinkPage = 360LinkPage + '</div></div>';
+LinkPage = LinkPage + '</div></div>';
+
+// Get information about displayed results and build results list
 
 
 
 
+// Junk for testing
+document.getElementById("CitationResults").innerHTML = LinkPage;
+
+
+// Get citation info from the URL instead of the page? Consolidate the buildUrl function with the getUrlVars
 
 
 jQuery("head link").remove(); // Remove existing styles
