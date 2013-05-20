@@ -2,8 +2,6 @@
 
 // Set up preferences for Link Resolver
 
-
-
 // Date format used by 360Link. Set to true if MM/DD/YYYY, false if DD/MM/YYYY
 var timeformat = true;
 
@@ -77,7 +75,10 @@ function getCite(field) {
 	}
 	
 	var citeCell = document.getElementById("Citation" + formatKey + field + "Value");
-	if(typeof citeCell !== 'undefined') {
+
+	console.log('CiteCell: ' + citeCell);
+
+	if((typeof citeCell !== 'undefined') || (citeCell !== 'null')) {
 		var citeValue = citeCell.querySelector("div").innerHTML;
 		return citeValue;
 	}
@@ -85,8 +86,8 @@ function getCite(field) {
 
 // Function to parse article citation values from the URL for building links to Refworks and Illiad
 
-function getUrlVars() {
-
+function getUrlVars() 
+{
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
         vars[key] = value;
@@ -96,6 +97,18 @@ function getUrlVars() {
     } else {
     	return false;
     }
+}
+
+// Function to get items from URL and then check for whether they are defined or not
+
+function buildUrl(sourceKey) 
+{
+	var keyVal = getUrlVars()[sourceKey];
+	if(typeof keyVal === 'undefined') {
+		return keyVal = "";
+	} else {
+		return keyVal;
+	}
 }
 
 // Function to parse human readable dates into MySQL dates for the links to Refworks and Illiad
@@ -135,15 +148,6 @@ if(typeof authorFullName !== 'undefined') {
 	var aulast = "";
 }
 
-// Function to get items from URL and then check for whether they are defined or not
-function buildUrl(sourceKey) {
-	var keyVal = getUrlVars()[sourceKey];
-	if(typeof keyVal === 'undefined') {
-		return keyVal = "";
-	} else {
-		return keyVal;
-	}
-}
 
 // Build the base link for the export URL (Refworks, Illiad)
 var ExportURLLink = 'sid=' + buildUrl("rft_id") + '&amp;genre=' + buildUrl("rft.genre") + '&amp;aufirst=' + encodeURIComponent(aufirst) + '&amp;aulast=' + encodeURIComponent(aulast) + '&amp;title=' + buildUrl("Title") + '&amp;atitle=' + buildUrl("rft.atitle") + '&amp;volume=' + buildUrl("rft.volume") + '&amp;issue=' + buildUrl("rft.issue") + '&amp;date=' + dateToSQL() + '&amp;issn=' + buildUrl("rft.issn") + '&amp;isbn=' + buildUrl("rft.isbn") + '&amp;spage=' + buildUrl("rft.spage") + '&amp;epage=' + buildUrl("rft.epage");
@@ -193,9 +197,6 @@ if(refWorks === true) {
 LinkPage = LinkPage + '</div></div>';
 
 // Get information about displayed results and build results list
-
-
-
 
 // Junk for testing
 document.getElementById("CitationResults").innerHTML = LinkPage;
