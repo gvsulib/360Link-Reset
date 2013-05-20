@@ -1,220 +1,23 @@
 
-
-// Set up preferences for Link Resolver
-
-// Date format used by 360Link. Set to true if MM/DD/YYYY, false if DD/MM/YYYY
-var timeformat = true;
-
-// SEARCH CATALOG LINK - Works with Millennium
-// -------------------------------------------
-// Use catalog link when no print holdings exist in SS?
-var catalog = true;
-// Base path to Millennium OPAC
-var catalogPath = 'http://library.catalog.gvsu.edu/';
-
-// CONSORTIAL CATALOG LINK - Works with Millennium
-// -------------------------------------------
-// Use consortial catalog link for loanables?
-var consort = true;
-// Base path to Consortial Catalog
-var consortLink = 'http://elibrary.mel.org/';
-
-// ILLIAD INTERLIBRARY LOAN LINK
-// -------------------------------------------
-// Use interlibrary loan link?
-var ill = true;
-// Base path to Illiad
-var illPath = 'https://gvsu.illiad.oclc.org/';
-
-// REFWORKS LINK
-// -------------------------------------------
-// Use Refworks link?
-var refWorks = true;
-
-// ERROR REPORTING 
-// -------------------------------------------
-// Show tech support email?
-var errorEmail = true;
-// Tech support email
-var errorEmailAddress = "erms@gvsu.edu";
-// Use automated error reporting? (See the README for additional setup)
-var autoErrorReporting = true;
-
-// --------------------------------------------------------
-// DON'T EDIT BELOW THIS UNLESS YOU KNOW WHAT YOU'RE DOING
-// --------------------------------------------------------
-
-// Get rid of crummy default styles and add our classy ones
+jQuery(document).ready(function() {
 
 
-// Functions for building the citations and OpenURL links
-
-// Get the path of this script
-var scripts= document.getElementsByTagName('script');
-var path= scripts[scripts.length-1].src.split('?')[0];      // remove any ?query
-var mydir= path.split('/').slice(0, -1).join('/')+'/';
-
-// Define variables
-var citeValue, classValue, results, articleLinksdata, journalLinksdata, dateRangedata, DatabaseNamedata, DatabaseLinkdata;
-var hasPrint = false;
-
-// Convert existing JS variable 'format' to the type used in div ids and classes
-var formatArray = format.split("Format");
-var formatKey = formatArray[0].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-
-// Function to parse citation information from the page
-
-function getCite(field) {
-
-	if(formatKey === 'Unknown' & field === 'Title') {
-		field = 'Publication';
-	}
-
-	if(formatKey === 'Patent' & field === 'Date') {
-		field = 'InventorDate';
-	}
-	
-	var citeCell = document.getElementById("Citation" + formatKey + field + "Value");
-
-	console.log('CiteCell: ' + citeCell);
-
-	if((typeof citeCell !== 'undefined') || (citeCell !== 'null')) {
-		var citeValue = citeCell.querySelector("div").innerHTML;
-		return citeValue;
-	}
-}
-
-// Function to parse article citation values from the URL for building links to Refworks and Illiad
-
-function getUrlVars() 
-{
-    var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-        vars[key] = value;
-    });
-    if(typeof vars !== 'undefined') {
-    	return vars;
-    } else {
-    	return false;
-    }
-}
-
-// Function to get items from URL and then check for whether they are defined or not
-
-function buildUrl(sourceKey) 
-{
-	var keyVal = getUrlVars()[sourceKey];
-	if(typeof keyVal === 'undefined') {
-		return keyVal = "";
-	} else {
-		return keyVal;
-	}
-}
-
-// Function to parse human readable dates into MySQL dates for the links to Refworks and Illiad
-
-function dateToSQL() {
-
-	var hrdate = getCite("Date");
-
-	if(typeof hrdate !== 'undefined') {
-
-		var dateArray = hrdate.split("/");
-
-		if(timeformat == true ) { // American Style Dates
-			return dateArray[2] + '-' + dateArray[0] + '-' + dateArray[1];
-		} else { // European style dates
-			return dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0];
-		}	
-
-	} else {
-
-		var dateArray = "";
-		return dateArray;
-
-	}
-}
-
-//Author Information
-
-var authorFullName = getCite("Author");
-
-if(typeof authorFullName !== 'undefined') {
-	var authorNames = authorFullName.split(", ");
-	var aufirst = authorNames[1];
-	var aulast = authorNames[0];
-} else {
-	var aufirst = "";
-	var aulast = "";
-}
-
-
-// Build the base link for the export URL (Refworks, Illiad)
-var ExportURLLink = 'sid=' + buildUrl("rft_id") + '&amp;genre=' + buildUrl("rft.genre") + '&amp;aufirst=' + encodeURIComponent(aufirst) + '&amp;aulast=' + encodeURIComponent(aulast) + '&amp;title=' + buildUrl("Title") + '&amp;atitle=' + buildUrl("rft.atitle") + '&amp;volume=' + buildUrl("rft.volume") + '&amp;issue=' + buildUrl("rft.issue") + '&amp;date=' + dateToSQL() + '&amp;issn=' + buildUrl("rft.issn") + '&amp;isbn=' + buildUrl("rft.isbn") + '&amp;spage=' + buildUrl("rft.spage") + '&amp;epage=' + buildUrl("rft.epage");
-
-// Build the citation
-
-// First, grab the refiner link
-var refinerContainer = document.getElementById("RefinerLink0");
-var refinerLink = refinerContainer.querySelector("a").href;
-
-// Build new page. Broke this up for readability and to simplify conditional statements.
-
-
-// Add the
-var LinkPage = '<div class="line"><div class="span1 unit">';
-LinkPage = LinkPage + '<h3>You are Looking For:</h3>';
-LinkPage = LinkPage + '<div class="vcard" id="citation">';
-if(aulast !== "") {	
-	LinkPage = LinkPage + '<span class="fn" id="Citation' + formatKey + 'AuthorValue">' + aulast + ', ' + aufirst + '. </span>';
-}
-if(typeof getCite("Date") !== "undefined") {	
-	LinkPage = LinkPage + '<time datetime="' + dateToSQL() + '">(' + getCite("Date") + '). </time>';
-}
-if(typeof buildUrl("rft.atitle") !== "undefined") {	
-	var articleTitle = buildUrl("rft.atitle");
-	articleTitle = decodeURIComponent(articleTitle.replace(/\+/g," "));
-	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'ArticleValue">' + articleTitle + '. </span>';
-}
-if(typeof getCite("Title") !== "undefined") {	
-	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'TitleValue"><i>' + getCite("Title") + '</i>. </span>';
-}
-if(getCite("Volume") !== "") {	
-	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'VolumeValue">' + getCite("Volume") + '</span>';
-}
-if(getCite("Issue") !== "") {	
-	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'IssueValue">(' + getCite("Issue") + ')</span>';
-} else {
-	LinkPage = LinkPage + '. ';
-}
-if(getCite("Page") !== "") {	
-	LinkPage = LinkPage + '<span id="Citation' + formatKey + 'PageValue">p. ' + getCite("Page") + ').</span>';
-}
-LinkPage = LinkPage + '&nbsp;<a href="' + refinerLink + '">Edit</a>&nbsp;';
-if(refWorks === true) {
-	LinkPage = LinkPage + '<span id="RefWorksLink">&nbsp;<a href="http://www.refworks.com/express/expressimport.asp?' + ExportURLLink + '" id="refworks">Refworks</a>&nbsp;';
-}
-LinkPage = LinkPage + '</div></div>';
-
-// Get information about displayed results and build results list
-
-// Junk for testing
-document.getElementById("CitationResults").innerHTML = LinkPage;
-
-
-// Get citation info from the URL instead of the page? Consolidate the buildUrl function with the getUrlVars
-
+// Since 360Link loads Prototype, need to use the jQuery prefix instead of $ 
+// to avoid conflicts with Prototype.
 
 jQuery("head link").remove(); // Remove existing styles
-
-
-
-
-
-
-
+var v=encodeURIComponent(document.URL);
+var results = ""; 
+var articleLinksdata = "";
+var journalLinksdata = "";
+var BookLinksdata = "";
+console.log(BookLinksdata);
+var dateRangedata = "";
+var DatabaseNamedata = "";
+var DatabaseLinkdata = "";
 var clicks = 0;
-
+var refinerlink = jQuery("#RefinerLink0 a").attr("href");
+var hasPrint = false;
 
 //define variables for capturing faulty URLs
 
@@ -230,7 +33,7 @@ var melLink = jQuery("table.CandyWrapper:last a.AnchorButton:contains('MeLCat')"
 
 // Build the citation
 
-var authorName = jQuery("span.fn").text();
+var authorName = jQuery("span.fn:first").text();
 authorName = jQuery.trim(authorName); // Trim leading white space form author name
 
 // Journals
@@ -262,9 +65,12 @@ if (format === "Journal" || format === "JournalFormat") {
 
 	// Replace the final table with semantic HTML, along with the dynamic links
 	// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
+var L="an electronic copy";
+var A="1 &#8211; 3 days";
+var O="articles";
 var journalTitleEncode = encodeURI(journalName);	
 
-var nextstepsLink = '<li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Document Delivery</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+var nextstepsLink = '<li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Document Delivery</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+v+'">Let our crack team of link fixers know</a>!</li>';
 
 
 
@@ -290,8 +96,11 @@ if (format === "BookFormat" || format === "Book") {
 
 	
 	// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
+var L="this book";
+var A="1 &#8211; 2 weeks";
+var O="books";
 var bookTitleLink = encodeURI(bookTitle); // Encode the white space in the URL
-var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '">Search the GVSU Catalog for this book</a></li><li><a href="' + melLink + '">Order from another Michigan library</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '">Search the GVSU Catalog for this book</a></li><li><a href="' + melLink + '">Order from another Michigan library</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+v+'">Let our crack team of link fixers know</a>!</li>';
 	
 }
 
@@ -315,8 +124,11 @@ if (format === "UnknownFormat" || format === "Unknown") {
 
 	
 	// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
+var L="this item";
+var A="1 &#8211; 2 weeks";
+var O="items";
 var bookTitleLink = encodeURI(bookTitle); // Encode the white space in the URL
-var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '">Search the GVSU Catalog for this book</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '">Search the GVSU Catalog for this book</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+v+'">Let our crack team of link fixers know</a>!</li>';
 	
 }
 
@@ -337,8 +149,11 @@ if (format === "Dissertation" || format === "DissertationFormat") {
 
 
 		// Remove the line above and uncomment the line below to add items to the bottom of your link resolver
+	var L="this dissertation";
+var A="1 &#8211; 2 weeks";
+var O="dissertations";
 	var dissTitleLink = encodeURI(dissTitle); // Encode the white space in the URL
-	var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + dissTitleLink + '">Search the GVSU Catalog for this dissertation</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu">Let our crack team of link fixers know</a>!</li>';
+	var nextstepsLink = '<li><a href="http://library.catalog.gvsu.edu/search/t' + dissTitleLink + '">Search the GVSU Catalog for this dissertation</a></li><li>Not Available Online? <a href="' + illiadLink + '">Order a copy from Interlibrary Loan</a></li><li>Found a problem? <a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+v+'">Let our crack team of link fixers know</a>!</li>';
 	
 }
 
@@ -353,6 +168,9 @@ if (format === "Patent" || format === "PatentFormat") {
 	authorName = jQuery("td#CitationPatentInventorValue").text();
 	authorName = jQuery.trim(authorName);
 
+var L="this patent";
+var A="1 &#8211; 2 weeks";
+var O="patents";
 	var patentTitleLink = encodeURI(patentTitle);
 	var nextstepsLink = '<li><a href="http://www.google.com/?tbm=pts#tbm=pts&q=' + dissTitleLink + '">Search the Google Patents for this patent.</a></li><li>Not Available Online? <a href="' + illiadLink + '">Submit a request.</a></li>';
   
@@ -392,7 +210,10 @@ jQuery("table#JournalLinkTable").find("tr").each(function(index) { // Grab value
 
 			journalLinksdata = journalLinksdata + "NA|||";
 
+			console.log(journalLinksdata);
+
 		}
+
 		
 		// Get the date range
 		
@@ -412,25 +233,71 @@ jQuery("table#JournalLinkTable").find("tr").each(function(index) { // Grab value
 		
 		DatabaseLinkdata = DatabaseLinkdata + newDBLink + "|||";
 					
-	}
+	} 
+				results = index; // Get total number of results
+				BookLinksdata = "NA|||";
+});
+
+if(results === "") {
+
+jQuery("table#BookLinkTable").find("tr").each(function(index) { // Grab values from the results table
 	
-	results = index; // Get total number of results
+	if(index !== 0) {
+
+		if(jQuery(this).find("#BookCL a").length > 0) { // There is a book link
+
+			var newHref = jQuery(this).find("#BookCL a").attr("href");
+			//console.log(BookLinksdata);
+			BookLinksdata = BookLinksdata + newHref + "|||";
+
+		} else { // No book link
+
+			BookLinksdata = BookLinksdata + "NA|||";
+
+		}
+
+		// Get the date range
+		
+		var newDates = jQuery(this).find("#DateCL").text();
+		
+		dateRangedata = dateRangedata + newDates + "|||";
+		
+		// Get the database name
+		
+		var newDBName = jQuery(this).find("#DatabaseCL").text();
+		
+		DatabaseNamedata = DatabaseNamedata + newDBName + "|||";
+		
+		// Get the database link
+		
+		var newDBLink = jQuery(this).find("#DatabaseCL a").attr("href");
+		
+		DatabaseLinkdata = DatabaseLinkdata + newDBLink + "|||";
+	}
+				results = index; // Get total number of results
+
 		
 });
+	}
+
+
 
 // Bust apart arrays into variabls we can call
 
 var articleLinks = articleLinksdata.split("|||");
 var journalLinks = journalLinksdata.split("|||");
+var BookLinks = BookLinksdata.split("|||");
 var dateRange = dateRangedata.split("|||");
 var DatabaseNames = DatabaseNamedata.split("|||");
 var DatabaseLinks = DatabaseLinkdata.split("|||");
 
 var additionalLinksnum = results - 1; // Number of links in the additional results list
 
-if((articleLinks[0] === "NA") && (journalLinks[0] !== "NA")) { // There was no article link, but there is a journal link
+if((articleLinks[0] === "NA") && (BookLinks[0] === "NA")) { // There was no article link, but there is a journal link
 	
 TopDatabaseName = jQuery.trim(DatabaseNames[0]);
+	console.log('Journal:' + journalLinks[0]);
+
 	
 // Check to see if top result is a print journal
 
@@ -442,9 +309,23 @@ var hasPrint = true;
 
 var topResultdiv = '<ul id="top-result"><li><a href="' + journalLinks[0] + '" class="article-button" target="_blank">Browse the Journal Online</a> in <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a></li></ul>';
 
-}} else { // There is an article link
+}} else { 
+
+	console.log('Article:' + articleLinks[0]);
+
+
+	if((BookLinks[0] !== "NA") && (BookLinksdata !== "")) { // Book Link
+
+		var topResultdiv = '<ul id="top-result"><li><a href="' + BookLinks[0] + '" class="article-button" target="_blank">Full Text Online</a> from <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a> <a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p><a href="' + journalLinks[0] + '" style="text-decoration: none;">Browse Journal</a></p><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[0] + '</p></div></li></ul>';
+
+
+	} else { // Article link
+
+		var topResultdiv = '<ul id="top-result"><li><a href="' + articleLinks[0] + '" class="article-button" target="_blank">Full Text Online</a> from <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a> <a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p><a href="' + journalLinks[0] + '" style="text-decoration: none;">Browse Journal</a></p><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[0] + '</p></div></li></ul>';
+	}
+
+// There is an article link
 		
-var topResultdiv = '<ul id="top-result"><li><a href="' + articleLinks[0] + '" class="article-button" target="_blank">Full Text Online</a> from <a href="' + DatabaseLinks[0] + '" class="SS_DatabaseHyperLink">' + jQuery.trim(DatabaseNames[0]) + '</a> <a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p><a href="' + journalLinks[0] + '" style="text-decoration: none;">Browse Journal</a></p><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[0] + '</p></div></li></ul>';
 	
 }
 
@@ -487,7 +368,7 @@ if(articleLinks[i] !== "NA") { // Article link - article has to be online
 	
 	if(jQuery.trim(DatabaseNames[i]) === "Print at GVSU Libraries") { // Item is in print
 		var hasPrint = true;
-		if(printAdditionalResults === "") { // First online article listed, add the header
+		if(printAdditionalResults === "") { // First print article listed, add the header
 
 			printAdditionalResults = printAdditionalResults + "<h4>Print</h4><ul>";
 			
@@ -504,7 +385,13 @@ if(articleLinks[i] !== "NA") { // Article link - article has to be online
 
 		}
 		
-		onlineAdditionalResults = onlineAdditionalResults + '<li><a href="' + journalLinks[i] + '" target="_blank">Browse the Journal Online</a> in <a href="' + DatabaseLinks[i] + '" class="SS_DatabaseHyperLink">' + DatabaseNames[i] + '</a><a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[i] + '</p></div></li>';
+		if((journalLinks[i] === "NA") && (BookLinks[i] !== "NA")) {
+		onlineAdditionalResults = onlineAdditionalResults + '<li><a href="' + BookLinks[i] + '" target="_blank">Browse the Journal Online</a> in <a href="' + DatabaseLinks[i] + '" class="SS_DatabaseHyperLink">' + DatabaseNames[i] + '</a><a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[i] + '</p></div></li>';
+
+		} else {
+					onlineAdditionalResults = onlineAdditionalResults + '<li><a href="' + journalLinks[i] + '" target="_blank">Browse the Journal Online</a> in <a href="' + DatabaseLinks[i] + '" class="SS_DatabaseHyperLink">' + DatabaseNames[i] + '</a><a class="holding-details"><img src="http://gvsu.edu/icon/help.png" alt="" /></a><div class="tooltip"><p style="font-size: 1em;"><i>Dates covered:</i><br />' + dateRange[i] + '</p></div></li>';
+
+		}
 		
 	}
 }
@@ -536,11 +423,19 @@ var Resultdiv = topResultdiv;
 
 
 if(results === "") { // Item is not available online or in print
+
+if(format === "Journal" || format === "JournalFormat") { 
+
+		var Resultdiv = '<div id="ContentNotAvailableTable"><p class="lib-big-text">We&#8217;re sorry, but this item is not available online. <small style="font-size: .7em !important; font-weight: normal !important;"><i><a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+v+'">Think this is wrong?</a></i></small></p></div> <div class="line"> <div class="span2 unit left"> <h4>Need This Item?</h4> <p style="font-size:1.2em;">We&#8217;ll get you '+L+" in "+A+'.</p> <p><a href="'+ illiadLink +'" class="lib-button-grey">Order a Copy</a></p> </div> <div class="span2 unit left lastUnit"> <h4>Need Research Help?</h4> <p style="font-size:1.2em;">Meet with a peer consultant to find similar ' + O + '.</p> <p><a href="http://gvsu.edu/library/prc" class="lib-button-grey">Make an Appointment</a></p> </div> </div>';
+
+} else {
 	
-	var Resultdiv = '<div id="ContentNotAvailableTable"><p class="lib-big-text">We&#8217;re sorry, but this item is not available online.</p><p>Think this is an error? Let our eResources team know at <a href="mailto:erms@gvsu.edu">erms@gvsu.edu</a>.</p></div>';
-	
+	var Resultdiv = '<div id="ContentNotAvailableTable"><p class="lib-big-text">This item may be available online <a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '">through our catalog</a>.</p><p><a href="http://library.catalog.gvsu.edu/search/t' + bookTitleLink + '" class="lib-button">Search the catalog</a></p></div> <div class="line"> <div class="span2 unit left"> <h4>Not available in the catalog?</h4> <p style="font-size:1.2em;">We&#8217;ll get you '+L+" in "+A+'.</p> <p><a href="'+ illiadLink +'" class="lib-button-grey">Order a Copy</a></p> </div> <div class="span2 unit left lastUnit"> <h4>Need Research Help?</h4> <p style="font-size:1.2em;">Meet with a peer consultant to find similar ' + O + '.</p> <p><a href="http://gvsu.edu/library/prc" class="lib-button-grey">Make an Appointment</a></p> </div></div>';
+}	
 
 }
+
+
 
 // Idiot div
 
@@ -610,32 +505,42 @@ if(pairvalues[0] !== "?SS_Page=refiner") { // Don't rewrite the page if this is 
 
 if (hasPrint != true && (format === "Journal" || format === "JournalFormat")) {nextstepsLink = '<li class="appeasement"><a href="http://library.catalog.gvsu.edu/search/s' + journalTitleEncode + '">Search the Library Catalog for this journal</a></li>' + nextstepsLink;};
 
-jQuery("#360link-reset").html('<div id="page-content" style="margin: 0; padding-left: 6em; width:85%;"><h2 style="text-align:left;">You are looking for:</h2><div id="citation">' + citationDiv + '&nbsp;<a href="' + refinerlink + '"><img src="http://gvsu.edu/icon/pencil.png" alt="Edit this Citation" /></a><a id="refworks" href="' + refworksLink + '">Export to Refworks</a></div>' + Resultdiv + '<div id="next-step"><ul>' + nextstepsLink + '</ul></div></div><div class="clear"></div><!-- Begin Custom GVSU Footer code --></div>');
+jQuery(".360link-reset").html('<h2 style="text-align:left;">You are looking for:</h2><div id="citation">' + citationDiv + '&nbsp;<a href="' + refinerlink + '"><img src="http://gvsu.edu/icon/pencil.png" alt="Edit this Citation" /></a><a id="refworks" href="' + refworksLink + '">Export to Refworks</a></div>' + Resultdiv + '<div id="next-step"><ul>' + nextstepsLink + '</ul></div></div><div class="clear"></div><!-- Begin Custom GVSU Footer code -->');
+
+jQuery("#360link-reset").html('<div id="page-content" style="margin: 0; width: 85%;"><h2 style="text-align:left;">You are looking for:</h2><div id="citation">' + citationDiv + '&nbsp;<a href="' + refinerlink + '"><img src="http://gvsu.edu/icon/pencil.png" alt="Edit this Citation" /></a><a id="refworks" href="' + refworksLink + '">Export to Refworks</a></div>' + Resultdiv + '<div id="next-step"><ul>' + nextstepsLink + '</ul></div></div><div class="clear"></div><!-- Begin Custom GVSU Footer code --></div>');
 
 }
 
 // Let's show a tooltip highlighting Document Delivery when the user has tried a few sources.
 // First, let's add the code for the tooltip:
 
-jQuery("#next-step ul").append('<li class="doc-del-tooltip">Having trouble? You can order a copy from Document Delivery, and they\'ll get it for you. It\'s free!<br /><a href="' + illiadLink + '" class="lib-db-access-button" style="font-size: 1.2em !important;">Order a Copy</a></li>');
+jQuery("#next-step ul").append('<li class="doc-del-tooltip">Having trouble? You can order a copy from Document Delivery, and they\'ll get it for you. It\'s free!<br /><a href="' + illiadLink + '" class="lib-button-grey" style="font-size: 1.2em !important; margin-top: 1.5em;margin-bottom:.5em;;">Order a Copy</a> <span style="display:inline-block;float:right;cursor:pointer;text-decoration:underline;margin-top: 3em;" id="cancel-doc-del">No Thanks</span><p style="clear:both;"><i><a href="mailto:erms@gvsu.edu?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+v+'" style="color: #fff !important; font-size:.8em;">Found an error? Let us know!</a></i></li>');
 jQuery(".doc-del-tooltip").hide();
+jQuery("head").append('<style>.doc-del-tooltip{padding:2em; position:absolute;top:25%;right:0;background-color:#0065A4;-webkit-box-shadow: -4px 6px 14px rgba(50, 50, 50, 0.51);-moz-box-shadow:    -4px 6px 14px rgba(50, 50, 50, 0.51);box-shadow:-4px 6px 14px rgba(50, 50, 50, 0.51);color: #fff;z-index:1002;overflow:auto;width:21em;height:10em;margin-left:-12.5em;margin-top:-3em;};</style>');
 
 // Now let's count clicks
 
+jQuery("#cancel-doc-del").click(function() {
+			jQuery(".doc-del-tooltip").hide();
+			clicks = 0;
+		});
 
-
-jQuery("#360link-reset ul li a").click(function() {
+jQuery(".360link-reset ul li a").click(function() {
 	
 	clicks = clicks + 1;
-	link = encodeURIComponent(window.location);
-	DBname = encodeURIComponent(jQuery(this).siblings("a.SS_DatabaseHyperLink").text());
-	ts = Math.round((new Date()).getTime() / 1000);	
-	datastring = datastring + ts + "," + DBname + "," + link + "\n";
+	console.log(clicks);
+	//link = encodeURIComponent(window.location);
+	//DBname = encodeURIComponent(jQuery(this).siblings("a.SS_DatabaseHyperLink").text());
+	//ts = Math.round((new Date()).getTime() / 1000);	
+	//datastring = datastring + ts + "," + DBname + "," + link + "\n";
 	if(clicks > 1) {
+		//jQuery(".360link-reset").css("position", "relative");
 		jQuery(".doc-del-tooltip").show();
+
+		
 		//lets also grab the openURL we are passing to the browser and pass it off
 		//to a PHP script that will write it elsewhere, so it can be checked
-		
+		/*
 		datastring = "data=" + datastring;
 		jQuery.ajax({
 		dataType: "string",
@@ -643,7 +548,7 @@ jQuery("#360link-reset ul li a").click(function() {
 		url: "url_write.php",
 		data: datastring
 	});
-		datastring = "";		
+		datastring = ""; */		
 	}	
 });
 
