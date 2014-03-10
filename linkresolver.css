@@ -219,7 +219,7 @@ a.holding-details {
 	padding: 1em 3%;
 	width: 94%;
 }
-.doc-del-tooltip{
+#doc-del-tooltip{
 	background-color:#0065A4;
 	color: #fff;
 	height:10em;
@@ -237,7 +237,7 @@ a.doc-del-problem {
 	color: #fff !important;
 	font-size: .8em;
 }
-.doc-del-tooltip .lib-button-grey {
+#doc-del-tooltip .lib-button-grey {
 	font-size: 1.2em;
 	margin-top: 1.5em;
 	margin-bottom: .5em;

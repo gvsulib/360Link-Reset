@@ -133,7 +133,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	
 	// Build the troubleshooting link
 	var listProblem = document.createElement('li');
-	listProblem.innerHTML = 'Found a problem? <a href="'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'">Let our crack team of link fixers know</a>!';
+	listProblem.innerHTML = 'Found a problem? <a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'">Let our crack team of link fixers know</a>!';
 	
 	// Build the next steps list
 	var nextStepsList = document.createElement('div');
@@ -436,9 +436,10 @@ $j(document).ready(function() { // Wait until the original page loads
 				docDelObject.style.display = 'none';
 				clicks = 0;
 			});
+			console.log(clicks);
 
 			// Let's count clicks to see when to show the document delivery tooltip
-			$j("#360link-reset-wrapper").find("ul").find("li").find("a").click(function() {
+			$j("#search-results").find("li").find("a").click(function() {
 				clicks++;
 				console.log(clicks);
 				if(clicks > 1) {
