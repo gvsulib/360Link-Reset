@@ -70,16 +70,16 @@ $j(document).ready(function() { // Wait until the original page loads
 		var title = $j("#CitationJournalTitleValue").text().trim(),article = $j("#CitationJournalArticleValue").text().trim()+'.',vol = ' ('+$j("#CitationJournalVolumeValue").text().trim()+')',issue = $j("#CitationJournalIssueValue").text().trim()+'.',date = '&nbsp;('+$j("#CitationJournalDateValue").text().trim()+').',pages = ' p.'+$j("#CitationJournalPageValue").text().trim()+'.',standardno = $j("#CitationJournalIssnValue").text().trim(),L="an electronic copy",A="1 &#8211; 3 days",O="article",titleEncode = encodeURI(title),resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from Document Delivery';
 	}
 	if (format === "BookFormat" || format === "Book") { // Books
-		var title = $j("#CitationBookTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationBookDateValue").text().trim()+').',standardno = $j("td#CitationBookISBNValue").text().trim(),L="this book",A="1 &#8211; 2 weeks",O="book",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='';
+		var title = $j("#CitationBookTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationBookDateValue").text().trim()+').',standardno = $j("td#CitationBookISBNValue").text().trim(),L="this book",A="1 &#8211; 2 weeks",O="book",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
 	}
 	if (format === "Dissertation" || format === "DissertationFormat") { // Dissertations
-		var title = $j("#CitationDissertationTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationDissertationDateValue").text().trim()+').',L="this dissertation",A="1 &#8211; 2 weeks",O="dissertation",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages=''; // Encode the white space in the URL
+		var title = $j("#CitationDissertationTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationDissertationDateValue").text().trim()+').',L="this dissertation",A="1 &#8211; 2 weeks",O="dissertation",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article=''; // Encode the white space in the URL
 	}
 	if (format === "Patent" || format === "PatentFormat") { // Patents
-		var title = $j("#CitationPatentTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationPatentInventorDateValue").text().trim()+').',authorName = $j("td#CitationPatentInventorValue").text().trim(),L="this patent",A="1 &#8211; 2 weeks",O="patent",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='';	
+		var title = $j("#CitationPatentTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationPatentInventorDateValue").text().trim()+').',authorName = $j("td#CitationPatentInventorValue").text().trim(),L="this patent",A="1 &#8211; 2 weeks",O="patent",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';	
 	}
 	if (format === "UnknownFormat" || format === "Unknown") { // Unknown Format
-		var title = $j("#CitationUnknownPublicationValue").text().trim(),date = '&nbsp;('+$j("#CitationUnknownDateValue").text().trim()+').',standardno=$j("#CitationBookISBNValue").text().trim(),L="this item",A="1 &#8211; 2 weeks",O="item",titleEncode = encodeURI(title),date='',resultsTable=$j("#BookLinkTable"),vol='',issue='',pages=''; 		
+		var title = $j("#CitationUnknownPublicationValue").text().trim(),date = '&nbsp;('+$j("#CitationUnknownDateValue").text().trim()+').',standardno=$j("#CitationBookISBNValue").text().trim(),L="this item",A="1 &#8211; 2 weeks",O="item",titleEncode = encodeURI(title),date='',resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article=''; 		
 	}
 	
 	// Build OpenURL for document delivery
@@ -189,17 +189,22 @@ $j(document).ready(function() { // Wait until the original page loads
 		var resultsDiv = document.createElement('div');
 		resultsDiv.id = 'search-results';
 	
-		var topResult = document.createElement('li'),topResultdiv = document.createElement('ul'),topResultMore = document.createElement('div');
+		var topResult = document.createElement('li'),topResultdiv = document.createElement('ul'),topResultMore = document.createElement('div'),topResultTrigger=document.createElement('a');
 		topResultdiv.id = 'top-result';
-		topResult.innerHTML = '<a href="' + buttonLink + '" class="article-button" target="_blank">' + buttonText + '</a> in <a href="' + DatabaseLinkdata[0] + '" class="SS_DatabaseHyperLink">' + DatabaseNamedata[0].trim() + '</a> <a class="holding-details">Details</a>';
-		topResultMore.className = 'tooltip';
-		topResultMore.innerHTML = '<i>Dates covered: </i>' + dateRangedata[0] + ' <a href="' + journalLinkdata[0] + '" class="journal-button">Browse Journal</a>';
-		topResult.appendChild(topResultMore);
+		topResult.innerHTML = '<a href="' + buttonLink + '" class="article-button" target="_blank">' + buttonText + '</a> in <a href="' + DatabaseLinkdata[0] + '" class="SS_DatabaseHyperLink">' + DatabaseNamedata[0].trim() + '</a>';
+		if(format === "Journal" || format === "JournalFormat") {
+			topResultTrigger.className = 'holding-details';
+			topResultTrigger.innerHTML = 'Details';
+			topResult.appendChild(topResultTrigger);
+			topResultMore.className = 'tooltip';
+			topResultMore.innerHTML = '<i>Dates covered: </i>' + dateRangedata[0] + ' <a href="' + journalLinkdata[0] + '" class="journal-button">Browse Journal</a>';
+			topResult.appendChild(topResultMore);
+		}
 		topResultdiv.appendChild(topResult);
 		resultsDiv.appendChild(topResultdiv);
 		
 	
-		if(i > 0) { // There are additional links
+		if(i > 1) { // There are additional links
 			var extraResults = i-1;
 			if(extraResults === 1) { // Only 1 additional result
 				var showResultsLabel = "Show 1 More Result"; 
