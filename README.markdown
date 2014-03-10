@@ -1,10 +1,10 @@
-#README - 360Link-Reset 2.0
+# 360Link Reset
+
+## A tool to radically improve Serials Solutions 360Link Link Resolver
 
 ---
 
-This tool was developed by Matthew Reidsma in Javascript to modify the SerialsSolutions 360Link link resolver.
-
-It was modified by Kyle Felker.
+This tool was developed by Matthew Reidsma in Javascript to modify the SerialsSolutions 360Link link resolver. It was modified by Kyle Felker.
 
 INSTALLATION 
 

@@ -1,123 +1,13 @@
-/* Link Resolver styles */
-/* If javascript is not avaialable. these styles will improve the 360 Link layout dramatically. */
-/* If javascript is available, the 360Link Reset script will rewrite the page with semantic HTML */
-/*  */
-/* For more info on 360Link Reset, visit http://gvsu.edu/library/360linkreset */
+/*
+* 	360Link Reset > linkresolver.css
+* 	Stylesheet for radically improving the Serials Solutions 360Link Link Resolver
+*
+*	For more information, see http://github.com/gvsulib/360Link-Reset
+* 
+*	Author: Matthew Reidsma, reidsmam@gvsu.edu, @mreidsma
+*	Version 3.0
+*/
 
-
-/* Styles for javascript disabled */
-
-table {
-	border-collapse: collapse;
-	display: inline-table;
-}
-
-table, table tr, table td {
-	border: none;
-}
-
-div#CitationResults {
-	font-size: 1.1em;
-	line-height: 1.5em;
-	padding: 0 1em !important;
-} 
-
-td.CitationValue div {
-	font-weight: normal;
-}
-
-#CitationJournalTitleValue, 
-#CitationBookTitleValue {
-	font-style: italic;
-}
-
-td.CitationLabel {
-	width: 5em;
-	color: #777;
-	font-weight: bold;
-}
-
-td#CitationJournalIssnValue, td#CitationJournalVolumeValue {
-	width: 25%; }
-
-#SearchResults {
-	width: 100%;
-	margin: 1em 0; }
-
-a#refworks {
-	display: inline-block;
-	padding-top: 20px;
-	border: 0;
-	height: 0;
-	width: 102px;
-	background: transparent url(../img/refworks-logo.gif) top left no-repeat;
-	position: relative;
-	top: 4px;
-	left: 10px;
-	overflow: hidden; }
-
-div#ArticleCL a,
-div#JournalCL a,
-a.article-button {
-	display: block;
-	padding: 6px 15px; 
-	text-align: center; 
-	text-decoration: none; 
-	-webkit-border-radius: 4px; 
-	-moz-border-radius: 4px; 
-	khtml-border-radius: 4px; 
-	border-radius: 4px;
-	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 2px rgba(255,255,255,.3), 0 1px 2px rgba(0,0,0,.29); 
-	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 2px rgba(255,255,255,.3), 0 1px 2px rgba(0,0,0,.29); 
-	box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 2px rgba(255,255,255,.3), 0 1px 2px rgba(0,0,0,.29); }
-
-	
-
-div#ArticleCL a,
-a.article-button {
-	background: #0090D2; 
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(.2, #52a8e8), color-stop(1, #2e76cf)); 
-	background: -moz-linear-gradient(center top, #52a8e8 20%, #2e76cf 100%); 
-	border: 1px solid #4081af; 
-	border-bottom-color: #20559a; 
-	color: white; 
-	margin: 0;
-	text-shadow: 0 -1px 0 rgba(0,0,0,.3); }
-	
-div#JournalCL a {
-	background: #999; 
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(.2, #ddd), color-stop(1, #999)); 
-	background: -moz-linear-gradient(center top, #ddd 20%, #999 100%);
-	border: 1px solid #777; 
-	border-bottom-color: #333; 
-	color: #343434; 
-	margin: 0 .5em 0 2em; }
-
-table#JournalLinkTable {
-	width: 95% !important;
-	margin-top: .5em;
-	font-size: 1.3em; }
-
-td div#DateCL {
-	margin-left: 2em;
-	color: #333; }
-
-div#DatabaseCL a,
-a.SS_DatabaseHyperLink { 
-	/* Don't make the database names look like links! */
-	color: #000 !important;
-	cursor: text !important;
-	display: inline-block;
-	padding: .5em .3em; 
-	text-decoration: none; }
-
-#ContentNotAvailableTable {
-	font-size: 1.2em; }
-
-#ContentNotAvailableTable a {
-	color: #069;
-	text-decoration: none; }
-	
 table#ContentAvailableTable,
 span.SS_ContentHeading, 
 img.CellSpacer, 
@@ -134,28 +24,150 @@ td.BorderS,
 td.BorderW,
 div.SS_NoResults {
 	/* Cruft cruft cruft! Stop the insanity */
-	display: none; }
-
+	display: none; 
+}
+table {
+	border-collapse: collapse;
+	display: inline-table;
+}
+table, table tr, table td {
+	border: none;
+}
+#CitationResults,
+#citation
+ {
+	font-size: 1.1em;
+	line-height: 1.5em;
+} 
+td.CitationValue div {
+	font-weight: normal;
+}
+#CitationJournalTitleValue, 
+#CitationBookTitleValue,
+#citation-title {
+	font-style: italic;
+}
+td.CitationLabel {
+	color: #777;
+	font-weight: bold;
+	width: 5em;
+}
+td#CitationJournalIssnValue, 
+td#CitationJournalVolumeValue {
+	width: 25%; 
+}
+#SearchResults {
+	margin: 1em 0; 
+	width: 100%;
+}
+a#refworks {
+	background: transparent url(img/refworks-logo.gif) top left no-repeat;
+	border: 0;
+	display: inline-block;
+	height: 0;
+	left: 10px;
+	overflow: hidden;
+	padding-top: 20px;
+	position: relative;
+	top: 4px;
+	width: 102px;
+}
+div#ArticleCL a,
+div#JournalCL a,
+a.article-button,
+a.journal-button {
+	display: inline-block;
+	padding: 6px 15px; 
+	text-align: center; 
+	text-decoration: none; 
+	-webkit-border-radius: 4px; 
+	-moz-border-radius: 4px; 
+	khtml-border-radius: 4px; 
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 2px rgba(255,255,255,.3), 0 1px 2px rgba(0,0,0,.29); 
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 2px rgba(255,255,255,.3), 0 1px 2px rgba(0,0,0,.29); 
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 2px rgba(255,255,255,.3), 0 1px 2px rgba(0,0,0,.29); 
+}
+div#ArticleCL a,
+a.article-button {
+	background: #0090D2; 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(.2, #52a8e8), color-stop(1, #2e76cf)); 
+	background: -moz-linear-gradient(center top, #52a8e8 20%, #2e76cf 100%); 
+	border: 1px solid #4081af; 
+	border-bottom-color: #20559a; 
+	color: #fff !important; 
+	margin: 0;
+	text-shadow: 0 -1px 0 rgba(0,0,0,.3); 
+}	
+div#JournalCL a,
+a.journal-button {
+	background: #eee; 
+	border: 1px solid #777; 
+	border-bottom-color: #333; 
+	color: #343434 !important; 
+	margin: 0 .5em 0 2em; 
+}
+table#JournalLinkTable {
+	width: 95% !important;
+	margin-top: .5em;
+	font-size: 1.3em; 
+}
+td div#DateCL {
+	margin-left: 2em;
+	color: #333; 
+}
+div#DatabaseCL a,
+a.SS_DatabaseHyperLink { 
+	/* Don't make the database names look like links! */
+	color: #000 !important;
+	cursor: text !important;
+	display: inline-block;
+	padding: .5em .3em; 
+	text-decoration: none; 
+}
+#ContentNotAvailableTable {
+	font-size: 1.2em; 
+}
+#ContentNotAvailableTable a {
+	color: #069;
+	text-decoration: none; 
+}
+	
 /* ####################################### */	
-/* Below are styles for javascript enabled */
-
+/* Below are styles for the 360Link Reset JavaScript */
+#link-reset-wrapper {
+	font-size: 1.1em;
+	line-height: 1.5em;
+	padding: 0 1em !important;
+}
+#citation {
+	margin-bottom: 1.5em;
+	font-size: 1.4em;
+}
+.edit-link {
+	background: transparent url(img/pencil.png) top left no-repeat;
+	border: 0;
+	display: inline-block;
+	padding: 0 .5em;
+	text-indent: -9999px;
+}
 p.lib-big-text { 
-	margin-top: 2em;
 	font-size: 120%;
-	font-weight: bold; }
-
+	font-weight: bold;
+	margin-top: 2em;
+}
 #top-result,
 #next-step {
-	margin-top: 2em; }
-
+	margin-top: 2em; 
+}
 #next-step li {
 	font-size: 1.4em;
-	margin-top: 1em; }
-
+	margin-top: 1em; 
+}
 #top-result li {
 	font-size: 1.6em;
-	margin-bottom: 1em; }
-
+	margin-bottom: 1em; 
+}
 ul#top-result,
 .event-body ul,
 #next-step ul {
@@ -164,47 +176,76 @@ ul#top-result,
 	padding:0; }
 
 #next-step ul li a {
-	text-decoration: none; }
-
+	text-decoration: none; 
+}
 #next-step {
-	border-top: 1px solid #ddd; }
-
+	border-top: 1px solid #ddd; 
+}
 a.holding-details {
-		font-size: 1em !important; }
-
+	color: #575757 !important;
+	display: inline-block;
+	font-size: 12px !important;
+	text-decoration: underline;
+	font-weight: normal !important;
+}
 .event-head {
 	color: #1F65A0;
 	font-size: 1.4em;
 	cursor: pointer;
-	margin: .8em 0; }
-
+	margin: .8em 0; 
+}
 .event-body ul li {
 	font-size: 1.3em;
-	margin-bottom: .8em; }
-
+}
 .event-body ul li a {
 	text-decoration: none;
-	font-weight: bold; }
-
+	font-weight: bold; 
+}
 .event-body h4 {
 	background: #ddd;
-	padding: .3em .5em; }
-
+	padding: .3em .5em; 
+}
 .holding-details:hover {
-	background-position:0 -44px ; }
-
+	background-position:0 -44px ; 
+}
 /* clicked state */
 .holding-details:focus {
-	background-position:0 -88px; }
-
+	background-position:0 -88px; 
+}
 .tooltip {
-	display: none;
 	background: #eee;
-	height:5em;
-	padding:1em;
-	width:13em;
-	font-size:.8em;
-	color:#333;
-	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 2px rgba(255,255,255,.3), 0 1px 2px rgba(0,0,0,.29); 
-	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 2px rgba(255,255,255,.3), 0 1px 2px rgba(0,0,0,.29); 
-	box-shadow: inset 0 1px 0 rgba(255,255,255,.3), inset 0 0 2px rgba(255,255,255,.3), 0 1px 2px rgba(0,0,0,.29); }
+	border: 1px solid #bbb;
+	font-size: .8em;
+	padding: 1em 3%;
+	width: 94%;
+}
+#doc-del-tooltip{
+	background-color:#0065A4;
+	color: #fff;
+	height:10em;
+	margin-left:-12.5em;
+	margin-top:-3em;
+	overflow:auto;
+	padding:2em; 
+	position:absolute;
+	right:0;
+	top:25%;
+	width:21em;
+	z-index:1002;
+}
+a.doc-del-problem {
+	color: #fff !important;
+	font-size: .8em;
+}
+#doc-del-tooltip .lib-button-grey {
+	font-size: 1.2em;
+	margin-top: 1.5em;
+	margin-bottom: .5em;
+}
+span#cancel-doc-del {
+	cursor: pointer;
+	display: inline-block;
+	float: right;
+	margin-top: 3em;
+	text-decoration: underline;
+}
