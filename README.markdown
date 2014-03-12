@@ -1,43 +1,53 @@
 # 360Link Reset
 
-## A tool to radically improve Serials Solutions 360Link Link Resolver
+A tool to radically improve Serials Solutions 360Link Link Resolver, developed by Matthew Reidsma and Kyle Felker for Grand Valley State University Libraries.
 
----
+----
 
-This tool was developed by Matthew Reidsma in Javascript to modify the SerialsSolutions 360Link link resolver. It was modified by Kyle Felker.
+360Link is a great tool for helping your patrons connect to full-text articles through a variety of research databases. Unfortunately, the UI hasn't been updated in years, and introduces a number of difficulties for patrons trying to access research articles and books. At GVSU, we noticed patrons were unable to determine which link to click in the results, or which result was the best one for them. Since we do a lot of user testing here at GVSU, we wanted a way to quickly make changes to the resolver on the fly, testing design hypotheses that might improve the patron's experience. This is how 360Link Reset was born, a JavaScript file that grabs the important bits of data from the standard 360Link page, and then rewrites the HTML to make a better experience.
 
-INSTALLATION 
+[![Sample images of 360Link before and 360Link after installing the script](http://matthew.reidsrow.com/img/360linkresults.png)](http://matthew.reidsrow.com/img/360linkresults.png)
 
-Upload the linkresolver.css and 360Link-reset.2.0.min.js files to your server and note the paths.
+After grabbing the citation information, URLs, and database links, 360Link reset rewrites the page in semantic HTML, simplifying the citation into a single line and showing only the first result in a list, hiding the rest until the user clicks "Show More Results." It also adds a few "Next steps" links, like searching the catalog for a journal without print holdings in Client Center, requesting an article from Document Delivery/ILL, or reporting a bad link or problem to your Electronic Resources Management team (ERMS).
 
-You'll need to add a few lines to your 360Link Administration Console. Under branding options, click "Edit" and then add the following to the very bottom of the header field:
----
+### INSTALLATION 
 
-<link href="/PATH/TO/linkresolver.css" rel="stylesheet" type="text/css" />
-<div id="360link-reset">
+First, you should customize the two main files for your system. linkresolver.css conatins styles for the stock and rewritten link resolver, and 360link-reset.js is the JavaScript that alters the page.
 
----
+#### linkresolver.css
+
+There is no need to make changes to this CSS file unless you want to change the colors and look and feel of the rewritten page. The styles at the top will work even if JavaScript fails or is turned off. The styles in the last half of the document affect the rewritten page.
+
+#### 360link-reset.js
+
+Open this file in a text editor (not Word!) and update the variables in this section to match your institution's URLs and phrasing.
+
+Lines 18-57 contain customization options for 360Link Reset. You can choose how certain labels read and set the default URLs for your OPAC (Millennium/Sierra), consortial catalog (Millennium/Sierra), and Interlibrary Loan software (Illiad). If you use a different OPAC or Ill software, you'll need to modify the script to form the correct URLs for your system.
+
+Once you have customized the script, you may want to minimize it to improve performance. You can use a site like [jscompress.com](http://jscompress.com) to minimize your JavaScript file.
+
+#### Serials Solutions Customization Manager
+
+Now you need the 360link-reset.js, linkresolver.css, and img/ files to live on a server. Upload them to a directory and make a note of the path. For instance, if I uploded the files to http://mywebsite.com/360link, I'd replace "/PATH/TO/" below with "http://mywebsite.com/360link/". 
+
+Now you'll need to add a few lines to your 360Link Administration Console. Under branding options, click "Edit" and then add the following to the very bottom of the header field:
+
+^<link href="/PATH/TO/linkresolver.css" rel="stylesheet" type="text/css" />
+
 Then in the footer section, add the following as the first lines:
+
+^<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+^<script src="PATH/TO/360link-reset.js"></script>
+
+Customization Manager will take 24 hours to push these changes live, you can preview what your site will look like using the Preview button after editing.
+
 ---
 
-</div>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="http://cdn.jquerytools.org/1.2.6/jquery.tools.min.js"></script>
-<script src="PATH/TO/360link-reset.2.0.min.js"></script>
-
----
-
-That's it! 
-
-WHAT IT DOES:
-
-360Link Reset runs through the crummy default 360Link page and grabs all of the important bits: URLs, citation information, database names, and then clears away all the cruft Serials Solutions adds to your page (except scripts) and starts fresh with a new batch of clean, simple semantic HTML. It then makes it look pretty, simplifying the citation into a single line and showing only the first result in a list, hiding the rest until the user clicks "Show More Results." The number one problem we found in our monthly usability tests of our link resolver was that multiple results confused everyone who used the site. This solution attempts to remedy the problem.
-
-More questions? Feel free to contact Matthew Reidsma on Twitter at @mreidsma or via email at reidsmam@gvsu.edu.
+More questions? Feel free to contact Matthew Reidsma on Twitter at [@mreidsma](http://twitter.com/mreidsma) or via email at [reidsmam@gvsu.edu](mailto:reidsmam@gvsu.edu).
 
 COPYRIGHT
 
-This tool is copyright 2011 Grand Valley State University Libraries. 
+This tool is copyright 2011-2014 Grand Valley State University Libraries. 
 
 This tool is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
