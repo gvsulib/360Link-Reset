@@ -32,12 +32,12 @@ Now you need the 360link-reset.js, linkresolver.css, and img/ files to live on a
 
 Now you'll need to add a few lines to your 360Link Administration Console. Under branding options, click "Edit" and then add the following to the very bottom of the header field:
 
-^<link href="/PATH/TO/linkresolver.css" rel="stylesheet" type="text/css" />
+	<link href="/PATH/TO/linkresolver.css" rel="stylesheet" type="text/css" />
 
 Then in the footer section, add the following as the first lines:
 
-^<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-^<script src="PATH/TO/360link-reset.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	<script src="PATH/TO/360link-reset.js"></script>
 
 Customization Manager will take 24 hours to push these changes live, you can preview what your site will look like using the Preview button after editing.
 
