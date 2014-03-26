@@ -189,7 +189,7 @@ $j(document).ready(function() { // Wait until the original page loads
 		var resultsDiv = document.createElement('div');
 		resultsDiv.id = 'search-results';
 	
-		var topResult = document.createElement('li'),topResultdiv = document.createElement('ul'),topResultMore = document.createElement('div'),topResultTrigger=document.createElement('a');
+		var topResult = document.createElement('li'),topResultdiv = document.createElement('ul'),topResultMore = document.createElement('div'),topResultTrigger=document.createElement('span');
 		topResultdiv.id = 'top-result';
 		topResult.innerHTML = '<a href="' + buttonLink + '" class="article-button" target="_blank">' + buttonText + '</a> in <a href="' + DatabaseLinkdata[0] + '" class="SS_DatabaseHyperLink">' + DatabaseNamedata[0].trim() + '</a>';
 		if(format === "Journal" || format === "JournalFormat") {
@@ -402,7 +402,7 @@ $j(document).ready(function() { // Wait until the original page loads
 			$j('.tooltip').hide();
 			
 			// Show or hide tooltip if holding details is clicked on
-			$j('a.holding-details').click(function() {
+			$j('span.holding-details').click(function() {
 				$j(this).next('.tooltip').toggle();
 				var currentLabel = $j(this).text();
 				if(currentLabel === "Details") {
