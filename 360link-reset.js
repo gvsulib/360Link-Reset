@@ -239,7 +239,7 @@ $j(document).ready(function() { // Wait until the original page loads
 						newResultLink = articleLinkdata[x];
 						newResultLabel = 'Full Text Online';
 					}
-					newResult.innerHTML = '<a href="' + newResultLink + '" target="_blank">' + newResultLabel + '</a> in <a href="' + DatabaseLinkdata[x] + '" class="SS_DatabaseHyperLink">' + DatabaseNamedata[x] + '</a> <a class="holding-details">Details</a>';
+					newResult.innerHTML = '<a href="' + newResultLink + '" target="_blank">' + newResultLabel + '</a> in <a href="' + DatabaseLinkdata[x] + '" class="SS_DatabaseHyperLink">' + DatabaseNamedata[x] + '</a> <span class="holding-details">Details</span>';
 					newResultHoldings = document.createElement('div');
 					newResultHoldings.className = 'tooltip';
 					newResultHoldings.innerHTML = '<i>Dates covered: </i>' + dateRangedata[x] + ' <a href="' + journalLinkdata[x] + '" class="journal-button">Browse Journal</a>';
