@@ -104,7 +104,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	} else {
 		OpenUrl += '&isbn='+standardno+''
 	}
-	OpenUrl += '&spage=' + p + '&epage=';
+	OpenUrl += '&spage='+p+'&epage=';
 	
 	var newPage = document.createElement('div');
 	newPage.id = 'link-reset-wrapper';
