@@ -62,6 +62,21 @@ $j(document).ready(function() { // Wait until the original page loads
 	// Remove existing styles
 	$j("head").find("link").remove(); 
 	
+	// Function to grab items from the URL
+	
+	function getQueryVariable(v) {
+	    var sidquery = window.location.search.substring(1);
+	    var vars = query.split('&');
+	    for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        if (decodeURIComponent(pair[0]) == v) {
+	            return decodeURIComponent(pair[1]);
+	console.log(pair[1]);
+	        }
+	    }
+	    console.log('Query variable %s not found', v);
+	}
+	
 	// Define common variables
 	var problemUrl=encodeURIComponent(document.URL),authorFirst=$j(".given-name").text().trim(),authorLast=$j(".family-name").text().trim(),results="",articleLinkdata=new Array(),journalLinkdata=new Array(),BookLinkdata=new Array(),dateRangedata=new Array(),DatabaseNamedata=new Array(),DatabaseLinkdata=new Array(),clicks=0,refinerlink=$j("#RefinerLink0").find("a").attr("href"),hasPrint=false,newHref,i=0,illLabel='Order a copy from Interlibrary Loan',searchLabel='Search the Library Catalog for this ',query = document.location.search,authorName = authorLast + ', ' + authorFirst;
 
@@ -83,7 +98,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	}
 	
 	// Build OpenURL for document delivery
-	var OpenUrl = 'sid=info%3Asid=&genre='+O+'&aulast='+encodeURI(authorLast)+'&aufirst='+encodeURI(authorFirst)+'&title='+encodeURI(title)+'&date='+encodeURI(date);
+	var OpenUrl = 'sid=' + encodeURI(getQueryVariable('rfr_id')) + '&genre='+O+'&aulast='+encodeURI(authorLast)+'&aufirst='+encodeURI(authorFirst)+'&title='+encodeURI(title)+'&date='+encodeURI(date);
 	if(format === "Journal" || format === "JournalFormat") {
 		OpenUrl += '&issn='+standardno+'&atitle='+encodeURI(article)+'&volume='+vol+'&part=&issue='+issue;
 	} else {
@@ -449,5 +464,8 @@ $j(document).ready(function() { // Wait until the original page loads
 		} // End doc del tooltip behavior code
 	
 	} // End page rewrite
+	
+	
+	
 
 });
