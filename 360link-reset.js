@@ -98,9 +98,9 @@ $j(document).ready(function() { // Wait until the original page loads
 	}
 	
 	// Build OpenURL for document delivery
-	var OpenUrl = 'sid=' + encodeURI(getQueryVariable('rfr_id')) + '&genre='+O+'&aulast='+encodeURI(authorLast)+'&aufirst='+encodeURI(authorFirst)+'&title='+encodeURI(title)+'&date='+encodeURI(date);
+	var OpenUrl = 'sid=' + encodeURI(getQueryVariable('rfr_id')) + '&genre='+O+'&aulast='+encodeURI(authorLast)+'&aufirst='+encodeURI(authorFirst)+'&title='+encodeURI(title)+'&date='+encodeURI(	$j("#CitationJournalDateValue").text().trim());
 	if(format === "Journal" || format === "JournalFormat") {
-		OpenUrl += '&issn='+standardno+'&atitle='+encodeURI(article)+'&volume='+vol+'&part=&issue='+issue;
+		OpenUrl += '&issn='+standardno+'&atitle='+encodeURI($j("#CitationJournalArticleValue").text().trim())+'&volume='+$j("#CitationJournalVolumeValue").text().trim()+'&part=&issue='+$j("#CitationJournalIssueValue").text().trim();
 	} else {
 		OpenUrl += '&isbn='+standardno+''
 	}
