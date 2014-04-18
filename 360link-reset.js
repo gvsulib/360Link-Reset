@@ -3,7 +3,7 @@
 * 	Script for radically improving the Serials Solutions 360Link Link Resolver
 *
 *	For more information, see http://github.com/gvsulib/360Link-Reset
-* 
+*
 *	Author: Matthew Reidsma, reidsmam@gvsu.edu, @mreidsma
 *	Version 3.0
 */
@@ -18,41 +18,45 @@ $j(document).ready(function() { // Wait until the original page loads
 	// ************************************************************************************
 	// Define your institution's local variables here
 	// ************************************************************************************
-	
+
 	// Put the base URL for your catalog here, set for a title search. (Syntax set for Sierra -
 	// Include the ? )
 	var opacUrl = 'http://library.catalog.gvsu.edu/search/t?';
-	
+
 	// If you have a consortial catalog in addition to your local OPAC, enter the base URL
 	// here set for a title search (syntax is set for Sierra - include ?)
 	var consortialUrl = 'http://elibrary.mel.org/search/t?'
-	
+
 	// If you have a consortial catalog, enter the name you want to refer to it as here
 	var consortialName = 'other Michigan libraries';
-	
+
 	// Put the base URL Illiad installation here. An OpenURL will be added for all ILL calls.
 	// Include the ?
 	var illBaseUrl = 'https://gvsu.illiad.oclc.org/illiad/illiad.dll/OpenURL?';
-	
+
 	// The troubleshooting email you'd like broken link reports to go to
 	var ermsEmail = 'erms@gvsu.edu';
-	
+
 	// The short name of your library or school you want to use in dialogs
 	var libraryName = 'GVSU';
-	
+
 	// Do you want to add a link to the end of the citation to export to RefWorks?
 	// true = yes, false = no
 	var refworksToggle = true;
-	
+
 	// Change this to read whatever 360Link says when your print holdings show up
 	var printLabel = 'Print Journal at GVSU Libraries';
-	
+
 	// Do you want to show a tooltip pointing folks to Document Delivery or ILL if they click
 	// on more than 1 full text link? (Usually means broken links)
 	// true = yes, false = no
 	var docDelTooltip = true;
-	
-	
+
+	// Temporary patch to make Illiad requests work - this is custom to the GVSU install
+	var illiadLink = $j("table.CandyWrapper:last a.AnchorButton:contains('Document Delivery')").attr("href");
+
+
+
 	// ************************************************************************************
 	// DON'T EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING!
 	// ************************************************************************************
@@ -60,10 +64,10 @@ $j(document).ready(function() { // Wait until the original page loads
 	// ACTIVATE MAGIC FAIRY DUST
 
 	// Remove existing styles
-	$j("head").find("link").remove(); 
-	
+	$j("head").find("link").remove();
+
 	// Function to grab items from the URL
-	
+
 	function getQueryVariable(v) {
 	    var sidquery = window.location.search.substring(1);
 	    var vars = query.split('&');
@@ -76,7 +80,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	    }
 	    console.log('Query variable %s not found', v);
 	}
-	
+
 	// Define common variables
 	var problemUrl=encodeURIComponent(document.URL),authorFirst=$j(".given-name").text().trim(),authorLast=$j(".family-name").text().trim(),results="",articleLinkdata=new Array(),journalLinkdata=new Array(),BookLinkdata=new Array(),dateRangedata=new Array(),DatabaseNamedata=new Array(),DatabaseLinkdata=new Array(),clicks=0,refinerlink=$j("#RefinerLink0").find("a").attr("href"),hasPrint=false,newHref,i=0,illLabel='Order a copy from Interlibrary Loan',searchLabel='Search the Library Catalog for this ',query = document.location.search,authorName = authorLast + ', ' + authorFirst;
 
@@ -91,12 +95,12 @@ $j(document).ready(function() { // Wait until the original page loads
 		var title = $j("#CitationDissertationTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationDissertationDateValue").text().trim()+').',L="this dissertation",A="1 &#8211; 2 weeks",O="dissertation",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article=''; // Encode the white space in the URL
 	}
 	if (format === "Patent" || format === "PatentFormat") { // Patents
-		var title = $j("#CitationPatentTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationPatentInventorDateValue").text().trim()+').',authorName = $j("td#CitationPatentInventorValue").text().trim(),L="this patent",A="1 &#8211; 2 weeks",O="patent",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';	
+		var title = $j("#CitationPatentTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationPatentInventorDateValue").text().trim()+').',authorName = $j("td#CitationPatentInventorValue").text().trim(),L="this patent",A="1 &#8211; 2 weeks",O="patent",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
 	}
 	if (format === "UnknownFormat" || format === "Unknown") { // Unknown Format
-		var title = $j("#CitationUnknownPublicationValue").text().trim(),date = '&nbsp;('+$j("#CitationUnknownDateValue").text().trim()+').',standardno=$j("#CitationBookISBNValue").text().trim(),L="this item",A="1 &#8211; 2 weeks",O="item",titleEncode = encodeURI(title),date='',resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article=''; 		
+		var title = $j("#CitationUnknownPublicationValue").text().trim(),date = '&nbsp;('+$j("#CitationUnknownDateValue").text().trim()+').',standardno=$j("#CitationBookISBNValue").text().trim(),L="this item",A="1 &#8211; 2 weeks",O="item",titleEncode = encodeURI(title),date='',resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
 	}
-	
+
 	// Build OpenURL for document delivery
 	var OpenUrl = 'sid=' + encodeURI(getQueryVariable('rfr_id')) + '&genre='+O+'&aulast='+encodeURI(authorLast)+'&aufirst='+encodeURI(authorFirst)+'&title='+encodeURI(title)+'&date='+encodeURI(	$j("#CitationJournalDateValue").text().trim());
 	if(format === "Journal" || format === "JournalFormat") {
@@ -105,18 +109,19 @@ $j(document).ready(function() { // Wait until the original page loads
 		OpenUrl += '&isbn='+standardno+''
 	}
 	OpenUrl += '&spage='+pages.substr(3).replace(".","")+'&epage=';
-	
+
+
 	var newPage = document.createElement('div');
 	newPage.id = 'link-reset-wrapper';
 	var newPageHeader = document.createElement('h2');
 	newPageHeader.style.textAlign = 'left';
 	newPageHeader.innerHTML = 'You are looking for:';
 	newPage.appendChild(newPageHeader);
-	
+
 	var citationDiv = document.createElement('div');
 	citationDiv.id = 'citation';
 	citationDiv.innerHTML = '<span id="citation-author">'+authorName+'.</span><span id="citation-date">' + date + '</span><span id="citation-article">&nbsp;' + article + '</span> <span id="citation-title">' + title + '.</span>' + vol + issue + pages + '&nbsp;<a href="' + refinerlink + '" class="edit-link">[Edit]</a>';
-	
+
 	// Add refworks export link if wanted
 	if(refworksToggle === true) {
 		var refWorksChunk = document.createElement('span');
@@ -130,26 +135,26 @@ $j(document).ready(function() { // Wait until the original page loads
 	listOpac.id = 'next-step-opac';
 	if(format === "Journal" || format === "JournalFormat") {
 		itemType = 'journal';
-	} 
+	}
 	if(format === "Patent" || format === "PatentFormat") {
 		opacUrl = 'http://www.google.com/?tbm=pts#tbm=pts&q=';
 		searchLabel = 'Search Google Patents for this ';
 	}
 	listOpac.innerHTML = '<a href="'+opacUrl+titleEncode+'">'+searchLabel+itemType+'</a>';
-	
-	if(format !== 'Journal' && format !== 'JournalFormat') { 
+
+	if(format !== 'Journal' && format !== 'JournalFormat') {
 		// Build consortial link for this item
 		var listConsortium = document.createElement('li');
 		listConsortium.innerHTML = '<a href="'+consortialUrl+titleEncode+'">Search '+consortialName+' for this '+O+'</a>';
 	}
-	
+
 	var listIll = document.createElement('li');
-	listIll.innerHTML = 'Not available online? <a href="'+illBaseUrl+OpenUrl+'">'+illLabel+'</a>';
-	
+	listIll.innerHTML = 'Not available online? <a href="'+illiadLink+'">'+illLabel+'</a>';
+
 	// Build the troubleshooting link
 	var listProblem = document.createElement('li');
 	listProblem.innerHTML = 'Found a problem? <a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'">Let our crack team of link fixers know</a>!';
-	
+
 	// Build the next steps list
 	var nextStepsList = document.createElement('div');
 	var nextStepsUl = document.createElement('ul');
@@ -160,7 +165,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	}
 	// Get data on all items in results list
 	$j(resultsTable).find("tr").each(function(index) { // Grab values from the results table
-		if(index !== 0) { 
+		if(index !== 0) {
 			if(format === "Journal" || format === "JournalFormat") {
 				// Get the article link, if available
 				articleLinkdata[i] = $j(this).find("#ArticleCL").find("a").attr("href");
@@ -168,7 +173,7 @@ $j(document).ready(function() { // Wait until the original page loads
 			} else { // Not a journal article
 				// Get the book link, if applicable
 				BookLinkdata[i] = $j(this).find("#BookCL").find("a").attr("href");
-			}	
+			}
 			// Get the date range
 			dateRangedata[i] = $j(this).find("#DateCL").text();
 			// Get the database name
@@ -176,12 +181,12 @@ $j(document).ready(function() { // Wait until the original page loads
 			// Get the database link
 			DatabaseLinkdata[i] = $j(this).find("#DatabaseCL").find("a").attr("href");
 			i++;
-		} 
+		}
 		results = index; // Get total number of results
 	});
-	
+
 	if(results > 0) { // There are results
-		
+
 		if(DatabaseNamedata[0] === printLabel) {
 			hasPrint = true;
 		}
@@ -199,11 +204,11 @@ $j(document).ready(function() { // Wait until the original page loads
 				buttonText += ' Online';
 			}
 		}
-	
+
 		// Create the results DOM object
 		var resultsDiv = document.createElement('div');
 		resultsDiv.id = 'search-results';
-	
+
 		var topResult = document.createElement('li'),topResultdiv = document.createElement('ul'),topResultMore = document.createElement('div'),topResultTrigger=document.createElement('span');
 		topResultdiv.id = 'top-result';
 		topResult.innerHTML = '<a href="' + buttonLink + '" class="article-button" target="_blank">' + buttonText + '</a> in <a href="' + DatabaseLinkdata[0] + '" class="SS_DatabaseHyperLink">' + DatabaseNamedata[0].trim() + '</a>';
@@ -217,23 +222,23 @@ $j(document).ready(function() { // Wait until the original page loads
 		}
 		topResultdiv.appendChild(topResult);
 		resultsDiv.appendChild(topResultdiv);
-		
-	
+
+
 		if(i > 1) { // There are additional links
 			var extraResults = i-1;
 			if(extraResults === 1) { // Only 1 additional result
-				var showResultsLabel = "Show 1 More Result"; 
+				var showResultsLabel = "Show 1 More Result";
 			} else { // More than one result
 				var showResultsLabel = "Show " + extraResults + " More Results";
 			}
-			
+
 			var additionalResultsTrigger = document.createElement('div');
 			additionalResultsTrigger.className = 'event-head';
 			additionalResultsTrigger.innerHTML = showResultsLabel;
-		
+
 			// Create variables for additional results
 			var additionalResultsdiv = document.createElement('div'), onlineResultsdiv = document.createElement('ul'), printResultsdiv = document.createElement('ul'), newResult, newResultLink, newResultLabel, newResultHoldings, printHeading, onlineHeading;
-		
+
 			for(var x = 1; x < results; x++) {
 				console.log(DatabaseNamedata[x].trim());
 				if(DatabaseNamedata[x].trim() === printLabel) { // Item is in print
@@ -262,10 +267,10 @@ $j(document).ready(function() { // Wait until the original page loads
 					onlineResultsdiv.appendChild(newResult);
 				} // End item online loop
 			} // End for loop
-			
+
 			var additionalResultsDiv = document.createElement('div');
 			additionalResultsDiv.className = 'event-body';
-			
+
 				if(typeof onlineHeading !== 'undefined') {
 					additionalResultsDiv.appendChild(onlineHeading);
 					additionalResultsDiv.appendChild(onlineResultsdiv);
@@ -274,18 +279,18 @@ $j(document).ready(function() { // Wait until the original page loads
 					additionalResultsDiv.appendChild(printHeading);
 					additionalResultsDiv.appendChild(printResultsdiv);
 				}
-				
+
 			resultsDiv.appendChild(additionalResultsTrigger);
 			resultsDiv.appendChild(additionalResultsDiv);
-			
+
 		} // End additional results loop
-		
+
 	} else { // No results
-		
+
 		// Create the results DOM object
 		var resultsDiv = document.createElement('div'),noResultsLabel = 'We&#8217re sorry, but this item is not available online. <small style="font-size: .7em !important; font-weight: normal !important;"><i><a href="mailto:' + ermsEmail + '?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'">Think this is wrong?</a></i></small>',noResultsButton = '',noResultsButtonLabel = '',noResultsIll = document.createElement('div'),noResultsprc = document.createElement('div');
 		resultsDiv.id = 'ContentNotAvailableTable';
-		
+
 		if(format !== "Journal" && format !== "JournalFormat") { // Requested item is not an article
 			noResultsLabel = 'This item may be available online <a href="http://library.catalog.gvsu.edu/search/t' + titleEncode + '">through our catalog</a>';
 			noResultsButtonLabel = '<a href="http://library.catalog.gvsu.edu/search/t' + titleEncode + '" class="lib-button">Search the catalog</a>';
@@ -303,7 +308,7 @@ $j(document).ready(function() { // Wait until the original page loads
 		// Make a container to hold the help options
 		var noResultsHelp = document.createElement('div');
 		noResultsHelp.className = 'line';
-		
+
 			// Build help options - first ILL/Document Delivery
 			noResultsIll.className = "span2 unit left";
 				var noResultsIllHeader = document.createElement('h4');
@@ -314,9 +319,9 @@ $j(document).ready(function() { // Wait until the original page loads
 				noResultsIllText.innerHTML = 'We&#8217;ll get you '+L+" in "+A+'.'; // Uses terms from citation grabber
 			noResultsIll.appendChild(noResultsIllText);
 				var noResultsIllButton = document.createElement('p');
-				noResultsIllButton.innerHTML = '<a href="'+illBaseUrl+OpenUrl+'" class="lib-button-grey">Order a Copy</a>';
+				noResultsIllButton.innerHTML = '<a href="'+illiadLink+'" class="lib-button-grey">Order a Copy</a>';
 			noResultsIll.appendChild(noResultsIllButton);
-			
+
 			// Build help options - second Peer Research Consultants
 			noResultsprc.className = "span2 unit left lastUnit";
 				var noResultsprcHeader = document.createElement('h4');
@@ -329,22 +334,22 @@ $j(document).ready(function() { // Wait until the original page loads
 				var noResultsprcButton = document.createElement('p');
 				noResultsprcButton.innerHTML = '<a href="http://gvsu.edu/library/prc" class="lib-button-grey">Make an Appointment</a>';
 			noResultsprc.appendChild(noResultsprcButton);
-			
+
 		noResultsHelp.appendChild(noResultsIll);
 		noResultsHelp.appendChild(noResultsprc);
-		
+
 		resultsDiv.appendChild(noResultsHelp);
-		
+
 	} // End no results
-	
+
 	// Serials Solutions does a strange thing when 2 citations conflict. They ask the user to choose between them.
 	// This clunky fix tries to make it easier for the user to understand why they are being asked to choose
 	// between two seemingly identical things.
-	
+
 	var idiotDiv = $j(".SS_HoldingText a").attr("href"); // This silly solution has appeared
-	
+
 	if(typeof(idiotDiv) !== 'undefined') { // There is a choice between two different citations
-		
+
 		// Set the variables needed
 		var whichCitationLink = new Array(),whichCitationJournal = new Array(), whichCitationIssn = new Array(),idiotResults,t=0,newResultItem;
 
@@ -356,23 +361,23 @@ $j(document).ready(function() { // Wait until the original page loads
 			t++;
 		});
 		idiotResults = t + 1;
-		
+
 		var resultsDiv = document.createElement('div');
 			resultDiv.id = 'citation-choice';
 		var choiceHeading = document.createElement('h4');
 			choiceHeading.innerHTML = 'This item is available in the following publications:';
 		var choiceList = document.createElement('ul');
 			choiceList.id = 'top-result';
-	
+
 		for(var j=0; j < idiotResults; j++) {
 			newResultItem = document.createElement('li');
-			newResultItem.innerHTML = '<a href="' + whichCitationLink[j] + '">' + whichCitationJournal[j] + ' ' + whichCitationIssn[j] + '</a>';		
+			newResultItem.innerHTML = '<a href="' + whichCitationLink[j] + '">' + whichCitationJournal[j] + ' ' + whichCitationIssn[j] + '</a>';
 			choiceList.appendChild(newResultItem);
 		}
-		
+
 		resultsDiv.appendChild(choiceHeading);
 		resultsDiv.appendChild(choiceList);
-	
+
 	} // End of Silly Choice Function
 
 	// Do the magic if this is a link resolver display page:
@@ -381,7 +386,7 @@ $j(document).ready(function() { // Wait until the original page loads
 
 	var pairvalues = query.split("&");
 	if(pairvalues[0] !== "?SS_Page=refiner") { // This is the citation form. Don't rewrite the page.
-	
+
 		// Build the next steps list
 		nextStepsUl.appendChild(listIll);
 		nextStepsUl.appendChild(listProblem);
@@ -389,33 +394,33 @@ $j(document).ready(function() { // Wait until the original page loads
 			// Let's show a tooltip highlighting Document Delivery when the user has tried a few sources.
 			var tooltip = document.createElement('li');
 			tooltip.id = 'doc-del-tooltip';
-			tooltip.innerHTML = 'Having trouble? You can order a copy from Document Delivery, and they&#8217;ll get it for you. It&#8217;s free!<br /><a href="'+illBaseUrl+OpenUrl+'" class="lib-button-grey">Order a Copy</a> <span id="cancel-doc-del">No Thanks</span><p style="clear:both;"><i><a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'" class="doc-del-problem">Found an error? Let us know!</a></i>';
-			nextStepsUl.appendChild(tooltip);	
+			tooltip.innerHTML = 'Having trouble? You can order a copy from Document Delivery, and they&#8217;ll get it for you. It&#8217;s free!<br /><a href="'+illiadLink+'" class="lib-button-grey">Order a Copy</a> <span id="cancel-doc-del">No Thanks</span><p style="clear:both;"><i><a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'" class="doc-del-problem">Found an error? Let us know!</a></i>';
+			nextStepsUl.appendChild(tooltip);
 		}
 		nextStepsList.appendChild(nextStepsUl);
-		
+
 		newPage.appendChild(citationDiv);
 		newPage.appendChild(resultsDiv);
 		newPage.appendChild(nextStepsList);
-		
+
 		// Add a clear div to reset all floats at the bottom before the footer starts
 		newPageClear = document.createElement('div');
 		newPageClear.style.clear = 'both';
 		newPage.appendChild(newPageClear);
-		
-		// Find the 
+
+		// Find the
 		var container = document.getElementById('CitationResults');
 		container.parentNode.replaceChild(newPage, container);
-		
+
 		//check and see if there are print holdings for journal. If so, hide the search the catalog link
 		if (hasPrint === true && (format === "Journal" || format === "JournalFormat")) {
 			document.getElementById('next-step-opac').style.display = 'none';
 		}
-		
+
 		if($j('.holding-details').length > 0) {
 			// There are results, so holding information should be hidden until asked for
 			$j('.tooltip').hide();
-			
+
 			// Show or hide tooltip if holding details is clicked on
 			$j('span.holding-details').click(function() {
 				$j(this).next('.tooltip').toggle();
@@ -426,11 +431,11 @@ $j(document).ready(function() { // Wait until the original page loads
 					$j(this).text('Details');
 				}
 			});
-			
+
 		}
-		
+
 		// Hide additional results until toggled
-		$j(".event-body").hide(); 
+		$j(".event-body").hide();
 		$j(".event-head").click(function() {
 			jQuery(".event-body").slideToggle(400);
 			var current_text = jQuery(".event-head").text();
@@ -438,14 +443,14 @@ $j(document).ready(function() { // Wait until the original page loads
 				jQuery(".event-head").text('Show More Results');
 			    } else {
 			    jQuery(".event-head").text('Hide Additional Results');
-			    }	
+			    }
 		});
-		
+
 		if(docDelTooltip === true) {
 			// Hide the tooltip for now
 			var docDelObject = document.getElementById('doc-del-tooltip');
 			docDelObject.style.display = 'none';
-		
+
 			// User has hidden the document delivery tooltip
 			$j("#cancel-doc-del").click(function() {
 				docDelObject.style.display = 'none';
@@ -459,13 +464,13 @@ $j(document).ready(function() { // Wait until the original page loads
 				console.log(clicks);
 				if(clicks > 1) {
 					docDelObject.style.display = 'block';
-				}	
+				}
 			});
 		} // End doc del tooltip behavior code
-	
+
 	} // End page rewrite
-	
-	
-	
+
+
+
 
 });
