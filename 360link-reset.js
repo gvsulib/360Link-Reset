@@ -64,8 +64,11 @@ $j(document).ready(function() { // Wait until the original page loads
 	// Ok, let's fix the proxying bug I'm seeing in routing folks to Illiad
 	
 	if(illiadLink.indexOf("ezproxy")) {
+		console.log("Coming from Off-campus, EZProxy is screwing this up.")
 		var illiadParts = illiadLink.split(".ezproxy.gvsu.edu");
 		illiadLink = illiadParts[0] + illiadParts[2];
+	} else {
+		console.log("No EZProxy problem detected.")
 	}
 
 	// ACTIVATE MAGIC FAIRY DUST
