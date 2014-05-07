@@ -60,6 +60,13 @@ $j(document).ready(function() { // Wait until the original page loads
 	// ************************************************************************************
 	// DON'T EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING!
 	// ************************************************************************************
+	
+	// Ok, let's fix the proxying bug I'm seeing in routing folks to Illiad
+	
+	if(illiadLink.indexOf("ezproxy")) {
+		var illiadParts = illiadLink.split(".ezproxy.gvsu.edu");
+		illiadLink = illiadParts[0] + illiadParts[2];
+	}
 
 	// ACTIVATE MAGIC FAIRY DUST
 
