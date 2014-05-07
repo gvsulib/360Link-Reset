@@ -66,7 +66,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	if(illiadLink.indexOf("ezproxy") > 0) {
 		console.log("Coming from Off-campus, EZProxy is screwing this up.")
 		var illiadParts = illiadLink.split(".ezproxy.gvsu.edu");
-		illiadLink = illiadParts[0] + illiadParts[2];
+		illiadLink = illiadParts[0] + illiadParts[1];
 	} else {
 		console.log("No EZProxy problem detected.")
 	}
