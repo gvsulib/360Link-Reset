@@ -332,14 +332,14 @@ $j(document).ready(function() { // Wait until the original page loads
 				noResultsIllButton.innerHTML = '<a href="'+illiadLink+'" class="lib-button-grey">Order a Copy</a>';
 			noResultsIll.appendChild(noResultsIllButton);
 
-			// Build help options - second Peer Research Consultants
+			// Build help options - second Research Consultants
 			noResultsprc.className = "span2 unit left lastUnit";
 				var noResultsprcHeader = document.createElement('h4');
 				noResultsprcHeader.innerHTML = 'Need Research Help?';
 			noResultsprc.appendChild(noResultsprcHeader);
 				var noResultsprcText = document.createElement('p');
 				noResultsprcText.style.fontSize = '1em';
-				noResultsprcText.innerHTML = 'Meet with a peer consultant to find similar ' + O + 's.'; // Uses term from citation grabber
+				noResultsprcText.innerHTML = 'Meet with a research consultant to find similar ' + O + 's.'; // Uses term from citation grabber
 			noResultsprc.appendChild(noResultsprcText);
 				var noResultsprcButton = document.createElement('p');
 				noResultsprcButton.innerHTML = '<a href="http://gvsu.edu/library/prc" class="lib-button-grey">Make an Appointment</a>';
