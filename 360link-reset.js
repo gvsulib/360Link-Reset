@@ -42,7 +42,7 @@ $j(document).ready(function() { // Wait until the original page loads
 
 	// Do you want to add a link to the end of the citation to export to RefWorks?
 	// true = yes, false = no
-	var refworksToggle = true;
+	var refworksToggle = false;
 
 	// Change this to read whatever 360Link says when your print holdings show up
 	var printLabel = 'Print Journal at GVSU Libraries';
