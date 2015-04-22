@@ -21,7 +21,7 @@ $j(document).ready(function() { // Wait until the original page loads
 
 	// Put the base URL for your catalog here, set for a title search. (Syntax set for Sierra -
 	// Include the ? )
-	var opacUrl = 'http://library.catalog.gvsu.edu/search/t?';
+	var opacUrl = 'http://library.albion.edu/search~S1/t?';
 
 	// If you have a consortial catalog in addition to your local OPAC, enter the base URL
 	// here set for a title search (syntax is set for Sierra - include ?)
@@ -32,20 +32,20 @@ $j(document).ready(function() { // Wait until the original page loads
 
 	// Put the base URL Illiad installation here. An OpenURL will be added for all ILL calls.
 	// Include the ?
-	var illBaseUrl = 'https://gvsu.illiad.oclc.org/illiad/illiad.dll/OpenURL?';
+	// var illBaseUrl = 'https://gvsu.illiad.oclc.org/illiad/illiad.dll/OpenURL?';
 
 	// The troubleshooting email you'd like broken link reports to go to
-	var ermsEmail = 'erms@gvsu.edu';
+	var ermsEmail = 'library@albion.edu';
 
 	// The short name of your library or school you want to use in dialogs
-	var libraryName = 'GVSU';
+	var libraryName = 'Albion';
 
 	// Do you want to add a link to the end of the citation to export to RefWorks?
 	// true = yes, false = no
 	var refworksToggle = false;
 
 	// Change this to read whatever 360Link says when your print holdings show up
-	var printLabel = 'Print Journal at GVSU Libraries';
+	var printLabel = 'Print at Albion College Library';
 
 	// Do you want to show a tooltip pointing folks to Document Delivery or ILL if they click
 	// on more than 1 full text link? (Usually means broken links)
@@ -53,7 +53,9 @@ $j(document).ready(function() { // Wait until the original page loads
 	var docDelTooltip = true;
 
 	// Temporary patch to make Illiad requests work - this is custom to the GVSU install
-	var illiadLink = $j("table.CandyWrapper:last a.AnchorButton:contains('Document Delivery')").attr("href");
+	//var illiadLink = $j("table.CandyWrapper:last a.AnchorButton:contains('Document Delivery')").attr("href");
+	// Illiad link for Albion
+	var illiadLink = 'http://illiad.albion.edu';
 
 
 
@@ -61,15 +63,6 @@ $j(document).ready(function() { // Wait until the original page loads
 	// DON'T EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING!
 	// ************************************************************************************
 	
-	// Ok, let's fix the proxying bug I'm seeing in routing folks to Illiad
-	
-	if(illiadLink.indexOf("ezproxy") > 0) {
-		console.log("Coming from Off-campus, EZProxy is screwing this up.")
-		var illiadParts = illiadLink.split(".ezproxy.gvsu.edu");
-		illiadLink = illiadParts[0] + illiadParts[1];
-	} else {
-		console.log("No EZProxy problem detected.")
-	}
 
 	// ACTIVATE MAGIC FAIRY DUST
 
@@ -163,7 +156,7 @@ $j(document).ready(function() { // Wait until the original page loads
 
 	// Build the troubleshooting link
 	var listProblem = document.createElement('li');
-	listProblem.innerHTML = 'Found a problem? <a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'">Let our crack team of link fixers know</a>!';
+	listProblem.innerHTML = 'Found a problem? <a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'">Let us know</a>!';
 
 	// Build the next steps list
 	var nextStepsList = document.createElement('div');
