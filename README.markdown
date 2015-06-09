@@ -36,7 +36,11 @@ This branch includes code to track page views by format in a simple MySQL databa
 
 Now you'll have a database that tracks each view and records the timestamp along with the format of the record. Adding additional metrics is trivial, but you'll have to add the code to pass the information through the image URL in 360Link-reset.js and update the itemrecord.php script and database structure to reflect your new changes. 
 
-A dashboard to see comparative stats in coming soon.
+If you'd like to use the visualization dashboard, you'll need to add a copy of charts.js to your directory, and point the reference in formats.php to the appropriate URL.
+
+Now when you load up formats.php, you'll have a nice visualization and dashboard of your link resolver traffic by format:
+
+![Link resolver format heads-up display](img/formats.png)
 
 #### Serials Solutions Customization Manager
 
