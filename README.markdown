@@ -26,6 +26,18 @@ Lines 18-57 contain customization options for 360Link Reset. You can choose how 
 
 Once you have customized the script, you may want to minimize it to improve performance. You can use a site like [jscompress.com](http://jscompress.com) to minimize your JavaScript file.
 
+#### Tracking views by Format
+
+This branch includes code to track page views by format in a simple MySQL database. To use this functionality, you'll need to do a few additional steps.
+
+1. **Create the MySQL database:** Using the file formats.sql, create a table in your server's MySQL to store the data. Make a note of the database name, the user and password, and the server name.
+2. **Set up config.php:** Open up config.sample.php in a text editor and add the database connection details from step one. Save the file as config.php, and upload it to the server in the same directory as the script and the itemrecord.php script.
+3. Set the correct path for the item tracker in 360Link-reset.js, [line 93](https://github.com/gvsulib/360Link-Reset/blob/master/360link-reset.js#L93). 
+
+Now you'll have a database that tracks each view and records the timestamp along with the format of the record. Adding additional metrics is trivial, but you'll have to add the code to pass the information through the image URL in 360Link-reset.js and update the itemrecord.php script and database structure to reflect your new changes. 
+
+A dashboard to see comparative stats in coming soon.
+
 #### Serials Solutions Customization Manager
 
 Now you need the 360link-reset.js, linkresolver.css, and img/ files to live on a server. Upload them to a directory and make a note of the path. For instance, if I uploded the files to http://mywebsite.com/360link, I'd replace "/PATH/TO/" below with "http://mywebsite.com/360link/". 
