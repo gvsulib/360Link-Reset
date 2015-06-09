@@ -8,7 +8,6 @@ echo base64_decode('R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==
 // Get the data from the URL
 
 $f = $_GET['f'];
-$u = urldecode($_GET['u']);
 $now = time();
 
 // Make the data into an array

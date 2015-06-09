@@ -90,7 +90,7 @@ $j(document).ready(function() { // Wait until the original page loads
 
 		var formatRecord = document.createElement('img');
 		formatRecord.alt = 'Spacer image';
-		formatRecord.src = '//labs.library.gvsu.edu/labs/360link-reset/itemtrack.php?f=' + itemType + '&amp;u=' + encodeURIComponent(problemUrl);
+		formatRecord.src = '//labs.library.gvsu.edu/labs/360link-reset/itemtrack.php?f=' + itemType;
 		console.log('Adding the spacer image to track format types...');
 		document.body.appendChild(formatRecord);
 		console.log('Format counting image successfully added!');
