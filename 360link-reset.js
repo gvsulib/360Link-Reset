@@ -71,6 +71,27 @@ $j(document).ready(function() { // Wait until the original page loads
 		console.log("No EZProxy problem detected.")
 	}
 
+	// Define common variables
+	var problemUrl=encodeURIComponent(document.URL),authorFirst=$j(".given-name").text().trim(),authorLast=$j(".family-name").text().trim(),results="",articleLinkdata=new Array(),journalLinkdata=new Array(),BookLinkdata=new Array(),dateRangedata=new Array(),DatabaseNamedata=new Array(),DatabaseLinkdata=new Array(),clicks=0,refinerlink=$j("#RefinerLink0").find("a").attr("href"),hasPrint=false,newHref,i=0,illLabel='Order a copy from Interlibrary Loan',searchLabel='Search the Library Catalog for this ',query = document.location.search,authorName = authorLast + ', ' + authorFirst,formatType,itemType;;
+
+
+	// Let's first record what type of item this is. Useful for knowing how many books folks are seeing here.
+
+		// First, let's standardize the format types
+		if(format.indexOf('Format') > 0) {
+			formatType = format.split('Format');
+			itemType = formatType[0];
+		} else {
+			itemType = format;
+		}
+
+		// Now let's record the item by adding a 1x1 image to the bottom of the DOM
+
+		var formatRecord = document.createElement('img');
+		formatRecord.alt = 'Spacer image';
+		formatRecord.src = '//labs.library.gvsu.edu/labs/360link-reset/itemtrack.php?f=' + itemType + '&amp;u=' + encodeURIComponent(problemUrl);
+		document.appendChild(formatRecord);
+
 	// ACTIVATE MAGIC FAIRY DUST
 
 	// Remove existing styles
@@ -91,9 +112,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	    console.log('Query variable %s not found', v);
 	}
 
-	// Define common variables
-	var problemUrl=encodeURIComponent(document.URL),authorFirst=$j(".given-name").text().trim(),authorLast=$j(".family-name").text().trim(),results="",articleLinkdata=new Array(),journalLinkdata=new Array(),BookLinkdata=new Array(),dateRangedata=new Array(),DatabaseNamedata=new Array(),DatabaseLinkdata=new Array(),clicks=0,refinerlink=$j("#RefinerLink0").find("a").attr("href"),hasPrint=false,newHref,i=0,illLabel='Order a copy from Interlibrary Loan',searchLabel='Search the Library Catalog for this ',query = document.location.search,authorName = authorLast + ', ' + authorFirst;
-
+	
 	// Set variables from citation
 	if (format === "Journal" || format === "JournalFormat") { // Journals
 		var title = $j("#CitationJournalTitleValue").text().trim(),article = $j("#CitationJournalArticleValue").text().trim()+'.',vol = ' ('+$j("#CitationJournalVolumeValue").text().trim()+')',issue = $j("#CitationJournalIssueValue").text().trim()+'.',date = '&nbsp;('+$j("#CitationJournalDateValue").text().trim()+').',pages = ' p.'+$j("#CitationJournalPageValue").text().trim()+'.',standardno = $j("#CitationJournalIssnValue").text().trim(),L="an electronic copy",A="1 &#8211; 3 days",O="article",titleEncode = encodeURI(title),resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from Document Delivery';
