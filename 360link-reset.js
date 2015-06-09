@@ -84,13 +84,16 @@ $j(document).ready(function() { // Wait until the original page loads
 		} else {
 			itemType = format;
 		}
+		console.log('This is a ' + itemType);
 
 		// Now let's record the item by adding a 1x1 image to the bottom of the DOM
 
 		var formatRecord = document.createElement('img');
 		formatRecord.alt = 'Spacer image';
 		formatRecord.src = '//labs.library.gvsu.edu/labs/360link-reset/itemtrack.php?f=' + itemType + '&amp;u=' + encodeURIComponent(problemUrl);
-		document.appendChild(formatRecord);
+		console.log('Adding the spacer image to track format types...');
+		document.body.appendChild(formatRecord);
+		console.log('Format counting image successfully added!');
 
 	// ACTIVATE MAGIC FAIRY DUST
 

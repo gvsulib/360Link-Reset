@@ -1,5 +1,10 @@
 <?php
 
+// Send back a 1px transparent gif so the browser is happy it got an image
+header("Access-Control-Allow-Origin: *");
+header('Content-Type: image/gif');
+echo base64_decode('R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==');
+
 // Get the data from the URL
 
 $f = $_GET['f'];
