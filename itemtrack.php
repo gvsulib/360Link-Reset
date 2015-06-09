@@ -5,16 +5,25 @@ header("Access-Control-Allow-Origin: *");
 header('Content-Type: image/gif');
 echo base64_decode('R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==');
 
+// Get correct timestamps
+date_default_timezone_set('America/Detroit');
+
 // Get the data from the URL
 
 $f = $_GET['f'];
 $now = time();
 
-// Make the data into an array
+// Connect to database
+include('config.php');
 
-$data = array($now, $f, $u);
+$db = new mysqli($db_host, $db_user, $db_pass, $db_database);
+if ($db->connect_errno) {
+	printf("Connect failed: %s\n", $db->connect_error);
+	exit();
+}
 
-// Save the record to the CSV file
+// Record 
+$db->query("INSERT INTO formats VALUES ('$now','$f','')");
 
-if (!$DataFile = fopen("data.csv", "a")) {echo "Failure: cannot open file"; die;};
-if (!fputcsv($DataFile, $data)) {echo "Failure: cannot write to file"; die;};
+// Done
+
