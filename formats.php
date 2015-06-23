@@ -69,6 +69,9 @@ if($row['format'] == 'Book') {
 if($row['format'] == 'Journal') {
 	$journal = $row["COUNT('format')"];
 }
+if($row['format'] == 'Dissertation') {
+	$diss = $row["COUNT('format')"];
+}
 
 	if($i < $numrows) {
 		echo ',';
@@ -102,6 +105,7 @@ ul li span { display: inline-block; float: right;}
 	<li><strong>Total:</strong> <span><?php echo $total; ?></span></li>
 	<li><strong>Journals:</strong> <span><?php echo $journal; ?></span></li>
 	<li><strong>Books:</strong> <span><?php echo $books; ?></span></li>
+	<li><strong>Dissertations:</strong> <span><?php echo $diss; ?></span></li>
 </ul>
 
 <div id="total"></div>
