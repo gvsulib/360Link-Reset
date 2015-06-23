@@ -86,7 +86,7 @@ if($row['format'] == 'Dissertation') {
 
 <style>
 body { text-align: center; margin: 0 auto; font-family: Helvetica, Verdana, sans-serif;}
-ul { list-style-type: none; width: 8em; margin: 1em auto; text-align: left;}
+ul { list-style-type: none; width: 11em; margin: 1em auto; text-align: left;}
 ul li:first-child { margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #ddd;}
 ul li span { display: inline-block; float: right;}
 </style>
