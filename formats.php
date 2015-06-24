@@ -86,10 +86,10 @@ if($row['format'] == 'Dissertation') {
 
 <style>
 body { text-align: center; margin: 0 auto; font-family: Helvetica, Verdana, sans-serif;}
-ul { list-style-type: none; width: 11em; margin: 1em auto; text-align: left;}
+ul { list-style-type: none; width: 14em; margin: 1em auto; text-align: left;}
 ul li:first-child { margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #ddd;}
 ul li span { display: inline-block; float: right;}
-span.colorblock { display: inline-block; width: 3em; height: 1em; border: none; }
+span.colorblock { display: inline-block; width: 3em; height: 1em; border: none; float: none; margin-right: .5em; }
 .color0 { background-color: <?php echo $colors[0]; ?>; }
 .color1 { background-color: <?php echo $colors[1]; ?>; }
 .color2 { background-color: <?php echo $colors[2]; ?>; }
@@ -107,9 +107,9 @@ span.colorblock { display: inline-block; width: 3em; height: 1em; border: none; 
 
 <ul style="">
 	<li><strong>Total:</strong> <span><?php echo $total; ?></span></li>
-	<li><span class="color0 colorblock">&nbsp;</span><strong>Journals:</strong> <span><?php echo $journal; ?></span></li>
-	<li><span class="color1 colorblock">&nbsp;</span><strong>Books:</strong> <span><?php echo $books; ?></span></li>
-	<li><span class="color2 colorblock">&nbsp;</span><strong>Dissertations:</strong> <span><?php echo $diss; ?></span></li>
+	<li><span class="color2 colorblock">&nbsp;</span><strong>Journals:</strong> <span><?php echo $journal; ?></span></li>
+	<li><span class="color0 colorblock">&nbsp;</span><strong>Books:</strong> <span><?php echo $books; ?></span></li>
+	<li><span class="color1 colorblock">&nbsp;</span><strong>Dissertations:</strong> <span><?php echo $diss; ?></span></li>
 </ul>
 
 <div id="total"></div>
