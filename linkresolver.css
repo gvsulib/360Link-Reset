@@ -26,6 +26,7 @@ div.SS_NoResults {
 	/* Cruft cruft cruft! Stop the insanity */
 	display: none; 
 }
+#cms-content a { color: #1F65A0;}
 table {
 	border-collapse: collapse;
 	display: inline-table;
@@ -36,7 +37,6 @@ table, table tr, table td {
 #CitationResults,
 #citation
  {
-	font-size: 1.1em;
 	line-height: 1.5em;
 } 
 td.CitationValue div {
@@ -136,13 +136,11 @@ a.SS_DatabaseHyperLink {
 /* ####################################### */	
 /* Below are styles for the 360Link Reset JavaScript */
 #link-reset-wrapper {
-	font-size: 1.1em;
 	line-height: 1.5em;
 	padding: 0 1em !important;
 }
 #citation {
 	margin-bottom: 1.5em;
-	font-size: 1.4em;
 }
 .edit-link {
 	background: transparent url(img/pencil.png) top left no-repeat;
@@ -161,11 +159,10 @@ p.lib-big-text {
 	margin-top: 2em; 
 }
 #next-step li {
-	font-size: 1.4em;
 	margin-top: 1em; 
 }
 #top-result li {
-	font-size: 1.6em;
+	font-size: 1.2em;
 	margin-bottom: 1em; 
 }
 ul#top-result,
@@ -191,13 +188,10 @@ span.holding-details {
 }
 .event-head {
 	color: #1F65A0;
-	font-size: 1.4em;
 	cursor: pointer;
 	margin: .8em 0; 
 }
-.event-body ul li {
-	font-size: 1.3em;
-}
+
 .event-body ul li a {
 	text-decoration: none;
 	font-weight: bold; 
@@ -232,7 +226,6 @@ a.doc-del-problem {
 	font-size: .8em;
 }
 #doc-del-tooltip .lib-button-grey {
-	font-size: 1.2em;
 	margin-top: 1.5em;
 	margin-bottom: .5em;
 }

@@ -243,7 +243,7 @@ $j(document).ready(function() { // Wait until the original page loads
 
 		var topResult = document.createElement('li'),topResultdiv = document.createElement('ul'),topResultMore = document.createElement('div'),topResultTrigger=document.createElement('span');
 		topResultdiv.id = 'top-result';
-		topResult.innerHTML = '<a href="' + buttonLink + '" class="article-button" target="_blank">' + buttonText + '</a> in <a href="' + DatabaseLinkdata[0] + '" class="SS_DatabaseHyperLink">' + DatabaseNamedata[0].trim() + '</a>';
+		topResult.innerHTML = '<a href="' + buttonLink + '" class="btn btn-primary btn-lg" target="_blank">' + buttonText + '</a> in <a href="' + DatabaseLinkdata[0] + '" class="SS_DatabaseHyperLink">' + DatabaseNamedata[0].trim() + '</a>';
 		if(format === "Journal" || format === "JournalFormat") {
 			topResultTrigger.className = 'holding-details';
 			topResultTrigger.innerHTML = 'Details';
@@ -325,7 +325,7 @@ $j(document).ready(function() { // Wait until the original page loads
 
 		if(format !== "Journal" && format !== "JournalFormat") { // Requested item is not an article
 			noResultsLabel = 'This item may be available online <a href="http://library.catalog.gvsu.edu/search/t' + titleEncode + '">through our catalog</a>';
-			noResultsButtonLabel = '<a href="http://library.catalog.gvsu.edu/search/t' + titleEncode + '" class="lib-button">Search the catalog</a>';
+			noResultsButtonLabel = '<a href="http://library.catalog.gvsu.edu/search/t' + titleEncode + '" class="btn btn-primary btn-lg">Search the catalog</a>';
 			noResultsButton = document.createElement('p');
 			noResultsButton.innerHTML = noResultsButtonLabel;
 		}
@@ -351,7 +351,7 @@ $j(document).ready(function() { // Wait until the original page loads
 				noResultsIllText.innerHTML = 'We&#8217;ll get you '+L+" in "+A+'.'; // Uses terms from citation grabber
 			noResultsIll.appendChild(noResultsIllText);
 				var noResultsIllButton = document.createElement('p');
-				noResultsIllButton.innerHTML = '<a href="'+illiadLink+'" class="lib-button-grey">Order a Copy</a>';
+				noResultsIllButton.innerHTML = '<a href="'+illiadLink+'" class="btn btn-default btn-lg">Order a Copy</a>';
 			noResultsIll.appendChild(noResultsIllButton);
 
 			// Build help options - second Research Consultants
@@ -364,7 +364,7 @@ $j(document).ready(function() { // Wait until the original page loads
 				noResultsprcText.innerHTML = 'Meet with a research consultant to find similar ' + O + 's.'; // Uses term from citation grabber
 			noResultsprc.appendChild(noResultsprcText);
 				var noResultsprcButton = document.createElement('p');
-				noResultsprcButton.innerHTML = '<a href="http://gvsu.edu/library/prc" class="lib-button-grey">Make an Appointment</a>';
+				noResultsprcButton.innerHTML = '<a href="http://gvsu.edu/library/prc" class="btn btn-default btn-lg">Make an Appointment</a>';
 			noResultsprc.appendChild(noResultsprcButton);
 
 		noResultsHelp.appendChild(noResultsIll);
@@ -426,7 +426,7 @@ $j(document).ready(function() { // Wait until the original page loads
 			// Let's show a tooltip highlighting Document Delivery when the user has tried a few sources.
 			var tooltip = document.createElement('li');
 			tooltip.id = 'doc-del-tooltip';
-			tooltip.innerHTML = 'Having trouble? You can order a copy from Document Delivery, and they&#8217;ll get it for you. It&#8217;s free!<br /><a href="'+illiadLink+'" class="lib-button-grey">Order a Copy</a> <span id="cancel-doc-del">No Thanks</span><p style="clear:both;"><i><a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'" class="doc-del-problem">Found an error? Let us know!</a></i>';
+			tooltip.innerHTML = 'Having trouble? You can order a copy from Document Delivery, and they&#8217;ll get it for you. It&#8217;s free!<br /><a href="'+illiadLink+'" class="btn btn-default btn-lg">Order a Copy</a> <span id="cancel-doc-del">No Thanks</span><p style="clear:both;"><i><a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'" class="doc-del-problem">Found an error? Let us know!</a></i>';
 			nextStepsUl.appendChild(tooltip);
 		}
 		nextStepsList.appendChild(nextStepsUl);
