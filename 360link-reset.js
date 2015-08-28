@@ -86,6 +86,17 @@ $j(document).ready(function() { // Wait until the original page loads
 		}
 		console.log('This is a ' + itemType);
 
+		if(itemType == 'Book') {
+			// Set a click handler on the full text links
+			$j('div#search-results').find('a:contains("Full Text")').click(function() {
+				var eBookProvider = $j(this).next('a.SS_DatabaseHyperLink').text();
+				console.log(eBookProvider);
+				var eBookTracker = document.createElement('img');
+				eBookTracker.src = '//labs.library.gvsu.edu/labs/ebooks/?source=360link&prov=' + encodeURIComponent(eBookProvider);
+				document.body.appendChild(eBookTracker);
+			});
+		}
+
 		// Now let's record the item by adding a 1x1 image to the bottom of the DOM
 
 		var formatRecord = document.createElement('img');
