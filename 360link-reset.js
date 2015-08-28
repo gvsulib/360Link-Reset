@@ -92,7 +92,7 @@ $j(document).ready(function() { // Wait until the original page loads
 				var eBookProvider = $j(this).next('a').text();
 				console.log(eBookProvider.trim());
 				var eBookTracker = document.createElement('img');
-				eBookTracker.src = '//labs.library.gvsu.edu/labs/ebooks/?source=360link&prov=' + encodeURIComponent(eBookProvider.trim());
+				eBookTracker.src = '//labs.library.gvsu.edu/labs/ebooks/?source=360link&prov=' + encodeURIComponent(eBookProvider.trim()) + '|||' + encodeURIComponent(window.location);
 				document.body.appendChild(eBookTracker);
 			});
 		}
