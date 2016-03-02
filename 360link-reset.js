@@ -86,26 +86,6 @@ $j(document).ready(function() { // Wait until the original page loads
 		}
 		console.log('This is a ' + itemType);
 
-		if(itemType == 'Book') {
-			// Set a click handler on the full text links
-			$j('div#search-results').find('a:contains("Full Text")').click(function() {
-				var eBookProvider = $j(this).next('a').text();
-				console.log(eBookProvider.trim());
-				var eBookTracker = document.createElement('img');
-				eBookTracker.src = '//labs.library.gvsu.edu/labs/ebooks/?source=360link&prov=' + encodeURIComponent(eBookProvider.trim()) + '|||' + encodeURIComponent(window.location);
-				document.body.appendChild(eBookTracker);
-			});
-		}
-
-		// Now let's record the item by adding a 1x1 image to the bottom of the DOM
-
-		var formatRecord = document.createElement('img');
-		formatRecord.alt = 'Spacer image';
-		formatRecord.src = '//labs.library.gvsu.edu/labs/360link-reset/itemtrack.php?f=' + itemType;
-		console.log('Adding the spacer image to track format types...');
-		document.body.appendChild(formatRecord);
-		console.log('Format counting image successfully added!');
-
 	// ACTIVATE MAGIC FAIRY DUST
 
 	// Remove existing styles
