@@ -484,6 +484,8 @@ $j(document).ready(function() { // Wait until the original page loads
 			// Let's count clicks to see when to show the document delivery tooltip
 			$j("#search-results").find("li").find("a").click(function() {
 				clicks++;
+				$j(".event-body").show();
+				$j(".event-head").text('Hide Additional Results');
 				console.log(clicks);
 				if(clicks > 1) {
 					docDelObject.style.display = 'block';
