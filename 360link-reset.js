@@ -23,6 +23,9 @@ $j(document).ready(function() { // Wait until the original page loads
 	// Include the ? )
 	var opacUrl = 'https://library.catalog.gvsu.edu/search/t?';
 
+	// What do you call the catalog?
+	var opacName = 'Library Catalog';
+
 	// If you have a consortial catalog in addition to your local OPAC, enter the base URL
 	// here set for a title search (syntax is set for Sierra - include ?)
 	var consortialUrl = 'http://elibrary.mel.org/search/t?'
@@ -34,15 +37,14 @@ $j(document).ready(function() { // Wait until the original page loads
 	// Include the ?
 	var illBaseUrl = 'https://gvsu.illiad.oclc.org/illiad/illiad.dll/OpenURL?';
 
+	// What do you call your ILL/Document Delivery department?
+	var illName = 'Document Delivery';
+
 	// The troubleshooting email you'd like broken link reports to go to
 	var ermsEmail = 'erms@gvsu.edu';
 
 	// The short name of your library or school you want to use in dialogs
 	var libraryName = 'GVSU';
-
-	// Do you want to add a link to the end of the citation to export to RefWorks?
-	// true = yes, false = no
-	var refworksToggle = false;
 
 	// Change this to read whatever 360Link says when your print holdings show up
 	var printLabel = 'Print Journal at GVSU Libraries';
@@ -60,19 +62,10 @@ $j(document).ready(function() { // Wait until the original page loads
 	// ************************************************************************************
 	// DON'T EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING!
 	// ************************************************************************************
-	
-	// Ok, let's fix the proxying bug I'm seeing in routing folks to Illiad
-	
-	if(illiadLink.indexOf("ezproxy") > 0) {
-		console.log("Coming from Off-campus, EZProxy is screwing this up.")
-		var illiadParts = illiadLink.split(".ezproxy.gvsu.edu");
-		illiadLink = illiadParts[0] + illiadParts[1];
-	} else {
-		console.log("No EZProxy problem detected.")
-	}
+
 
 	// Define common variables
-	var problemUrl=encodeURIComponent(document.URL),authorFirst=$j(".given-name").text().trim(),authorLast=$j(".family-name").text().trim(),results="",articleLinkdata=new Array(),journalLinkdata=new Array(),BookLinkdata=new Array(),dateRangedata=new Array(),DatabaseNamedata=new Array(),DatabaseLinkdata=new Array(),clicks=0,refinerlink=$j("#RefinerLink0").find("a").attr("href"),hasPrint=false,newHref,i=0,illLabel='Order a copy from Document Delivery',searchLabel='Search the Library Catalog for this ',query = document.location.search,authorName = authorLast + ', ' + authorFirst,formatType,itemType;;
+	var problemUrl=encodeURIComponent(document.URL),authorFirst=$j(".given-name").text().trim(),authorLast=$j(".family-name").text().trim(),results="",articleLinkdata=new Array(),journalLinkdata=new Array(),BookLinkdata=new Array(),dateRangedata=new Array(),DatabaseNamedata=new Array(),DatabaseLinkdata=new Array(),clicks=0,refinerlink=$j("#RefinerLink0").find("a").attr("href"),hasPrint=false,newHref,i=0,illLabel='Order a copy from ' +illName,searchLabel='Search the ' + opacName + ' for this ',query = document.location.search,authorName = authorLast + ', ' + authorFirst,formatType,itemType;;
 
 
 	// Let's first record what type of item this is. Useful for knowing how many books folks are seeing here.
@@ -109,7 +102,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	
 	// Set variables from citation
 	if (format === "Journal" || format === "JournalFormat") { // Journals
-		var title = $j("#CitationJournalTitleValue").text().trim(),article = $j("#CitationJournalArticleValue").text().trim()+'.',vol = ' ('+$j("#CitationJournalVolumeValue").text().trim()+')',issue = $j("#CitationJournalIssueValue").text().trim()+'.',date = '&nbsp;('+$j("#CitationJournalDateValue").text().trim()+').',pages = ' p.'+$j("#CitationJournalPageValue").text().trim()+'.',standardno = $j("#CitationJournalIssnValue").text().trim(),L="an electronic copy",A="1 &#8211; 3 days",O="article",titleEncode = encodeURI(title),resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from Document Delivery';
+		var title = $j("#CitationJournalTitleValue").text().trim(),article = $j("#CitationJournalArticleValue").text().trim()+'.',vol = ' ('+$j("#CitationJournalVolumeValue").text().trim()+')',issue = $j("#CitationJournalIssueValue").text().trim()+'.',date = '&nbsp;('+$j("#CitationJournalDateValue").text().trim()+').',pages = ' p.'+$j("#CitationJournalPageValue").text().trim()+'.',standardno = $j("#CitationJournalIssnValue").text().trim(),L="an electronic copy",A="1 &#8211; 3 days",O="article",titleEncode = encodeURI(title),resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from ' + illName;
 	}
 	if (format === "BookFormat" || format === "Book") { // Books
 		var title = $j("#CitationBookTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationBookDateValue").text().trim()+').',standardno = $j("td#CitationBookISBNValue").text().trim(),L="this book",A="1 &#8211; 2 weeks",O="book",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
@@ -144,14 +137,6 @@ $j(document).ready(function() { // Wait until the original page loads
 	var citationDiv = document.createElement('div');
 	citationDiv.id = 'citation';
 	citationDiv.innerHTML = '<span id="citation-author">'+authorName+'.</span><span id="citation-date">' + date + '</span><span id="citation-article">&nbsp;' + article + '</span> <span id="citation-title">' + title + '.</span>' + vol + issue + pages + '&nbsp;<a href="' + refinerlink + '" class="edit-link">[Edit]</a>';
-
-	// Add refworks export link if wanted
-	if(refworksToggle === true) {
-		var refWorksChunk = document.createElement('span');
-		refWorksChunk.id = 'refworks-export';
-		refWorksChunk.innerHTML = '<a id="refworks" href="http://www.refworks.com/express/expressimport.asp?' + OpenUrl + '">Export to Refworks</a></div>';
-		citationDiv.appendChild(refWorksChunk);
-	}
 
 	// Build list element for searching catalog or Google Patents
 	var listOpac = document.createElement('li'),itemType=O;
@@ -315,8 +300,8 @@ $j(document).ready(function() { // Wait until the original page loads
 		resultsDiv.id = 'ContentNotAvailableTable';
 
 		if(format !== "Journal" && format !== "JournalFormat") { // Requested item is not an article
-			noResultsLabel = 'This item may be available online <a href="' + opacUrl + titleEncode + '">through our Library Catalog</a>';
-			noResultsButtonLabel = '<a href="' + opacUrl + titleEncode + '" class="btn btn-primary btn-lg lib-button">Search the Library Catalog</a>';
+			noResultsLabel = 'This item may be available online <a href="' + opacUrl + titleEncode + '">through our ' + opacName + '</a>';
+			noResultsButtonLabel = '<a href="' + opacUrl + titleEncode + '" class="btn btn-primary btn-lg lib-button">Search the ' + opacName + '</a>';
 			noResultsButton = document.createElement('p');
 			noResultsButton.innerHTML = noResultsButtonLabel;
 		}
@@ -417,7 +402,7 @@ $j(document).ready(function() { // Wait until the original page loads
 			// Let's show a tooltip highlighting Document Delivery when the user has tried a few sources.
 			var tooltip = document.createElement('li');
 			tooltip.id = 'doc-del-tooltip';
-			tooltip.innerHTML = 'Having trouble? You can order a copy from Document Delivery, and they&#8217;ll get it for you. It&#8217;s free!<br /><a href="'+illiadLink+'" class="btn btn-default btn-lg lib-button-grey">Order a Copy</a> <span id="cancel-doc-del">No Thanks</span><p style="clear:both;"><i><a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'" class="doc-del-problem">Found an error? Let us know!</a></i>';
+			tooltip.innerHTML = 'Having trouble? You can order a copy from ' + illName +', and they&#8217;ll get it for you. It&#8217;s free!<br /><a href="'+illiadLink+'" class="btn btn-default btn-lg lib-button-grey">Order a Copy</a> <span id="cancel-doc-del">No Thanks</span><p style="clear:both;"><i><a href="mailto:'+ermsEmail+'?subject=Bad%20Full%20Text%20Link&body=%0A%0AProblem%20URL:%20'+problemUrl+'" class="doc-del-problem">Found an error? Let us know!</a></i>';
 			nextStepsUl.appendChild(tooltip);
 		}
 		nextStepsList.appendChild(nextStepsUl);
