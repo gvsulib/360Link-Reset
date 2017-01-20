@@ -5,7 +5,7 @@
 *	For more information, see http://github.com/gvsulib/360Link-Reset
 *
 *	Author: Matthew Reidsma, reidsmam@gvsu.edu, @mreidsma
-*	Version 3.0
+*	Version 3.1
 */
 
 
@@ -21,7 +21,7 @@ $j(document).ready(function() { // Wait until the original page loads
 
 	// Put the base URL for your catalog here, set for a title search. (Syntax set for Sierra -
 	// Include the ? )
-	var opacUrl = 'http://library.catalog.gvsu.edu/search/t?';
+	var opacUrl = 'https://library.catalog.gvsu.edu/search/t?';
 
 	// If you have a consortial catalog in addition to your local OPAC, enter the base URL
 	// here set for a title search (syntax is set for Sierra - include ?)
@@ -72,7 +72,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	}
 
 	// Define common variables
-	var problemUrl=encodeURIComponent(document.URL),authorFirst=$j(".given-name").text().trim(),authorLast=$j(".family-name").text().trim(),results="",articleLinkdata=new Array(),journalLinkdata=new Array(),BookLinkdata=new Array(),dateRangedata=new Array(),DatabaseNamedata=new Array(),DatabaseLinkdata=new Array(),clicks=0,refinerlink=$j("#RefinerLink0").find("a").attr("href"),hasPrint=false,newHref,i=0,illLabel='Order a copy from Interlibrary Loan',searchLabel='Search the Library Catalog for this ',query = document.location.search,authorName = authorLast + ', ' + authorFirst,formatType,itemType;;
+	var problemUrl=encodeURIComponent(document.URL),authorFirst=$j(".given-name").text().trim(),authorLast=$j(".family-name").text().trim(),results="",articleLinkdata=new Array(),journalLinkdata=new Array(),BookLinkdata=new Array(),dateRangedata=new Array(),DatabaseNamedata=new Array(),DatabaseLinkdata=new Array(),clicks=0,refinerlink=$j("#RefinerLink0").find("a").attr("href"),hasPrint=false,newHref,i=0,illLabel='Order a copy from Document Delivery',searchLabel='Search the Library Catalog for this ',query = document.location.search,authorName = authorLast + ', ' + authorFirst,formatType,itemType;;
 
 
 	// Let's first record what type of item this is. Useful for knowing how many books folks are seeing here.
@@ -315,8 +315,8 @@ $j(document).ready(function() { // Wait until the original page loads
 		resultsDiv.id = 'ContentNotAvailableTable';
 
 		if(format !== "Journal" && format !== "JournalFormat") { // Requested item is not an article
-			noResultsLabel = 'This item may be available online <a href="http://library.catalog.gvsu.edu/search/t' + titleEncode + '">through our catalog</a>';
-			noResultsButtonLabel = '<a href="http://library.catalog.gvsu.edu/search/t' + titleEncode + '" class="btn btn-primary btn-lg lib-button">Search the catalog</a>';
+			noResultsLabel = 'This item may be available online <a href="' + opacUrl + titleEncode + '">through our Library Catalog</a>';
+			noResultsButtonLabel = '<a href="' + opacUrl + titleEncode + '" class="btn btn-primary btn-lg lib-button">Search the Library Catalog</a>';
 			noResultsButton = document.createElement('p');
 			noResultsButton.innerHTML = noResultsButtonLabel;
 		}

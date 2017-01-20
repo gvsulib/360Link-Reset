@@ -1,0 +1,53 @@
+<style>
+#lib-search-articles { margin: 2em 0; padding: .5em 0; }
+#lib-search-articles input[type="submit"] { width: 18%; position: relative; bottom: 1px; }
+#lib-search-articles input[name="s.q"] { width: 78%; }
+span.width3 { display: inline-block; margin-right: 3%; }
+span.width3.right { float: right; }
+legend { text-indent: -999px; }
+fieldset { padding-top: 0; padding-bottom: 0; margin: 0; min-height: auto;}
+@media screen and (max-width: 600px) {
+input[name="s.q"] { width: 65%; }
+#lib-search-articles input[type="submit"] { bottom: 7px; }
+span.width3 { display: block; margin: .5em 0; float: none; }
+}
+</style>
+
+<form method="get" action="https://gvsu.summon.serialssolutions.com/search" id="lib-search-articles">
+	<input name="s.fvf[]" value="ContentType,Journal Article" type="hidden">      
+	<input name="s.fvf[]" value="ContentType,Newspaper Article" type="hidden">      
+	<input name="s.fvf[]" value="ContentType,Trade Publication Article" type="hidden">
+	<input type="hidden" name="spellcheck" value="true">
+	<input name="keep_r" value="true" type="hidden">
+
+	<label for="s.q">Search for Articles:</label><br />
+	<input type="text" name="s.q" id="s.q">
+
+    <input type="submit" value="Search" /><br />
+
+<div class="row">
+	<div class="span2">
+    <fieldset>
+    <legend>Search Facets</legend>
+    <span class="width3">
+    	<input id="fulltext" type="checkbox" name="s.fvf[]" value="IsFullText,true" /> 
+    	<label for="fulltext">Full-Text Articles Only</label>
+    </span>
+
+    <span class="width3"> 
+    	<input id="scholarly" type="checkbox" name="s.fvf[]" value="IsScholarly,true" />
+    	<label for="scholarly">Scholarly/Peer Review Only</label>
+    </span>
+    </fieldset>
+    </div>
+
+<div class="span1">
+    <span class="width3 right"><a href="https://gvsu.summon.serialssolutions.com/advanced">Advanced Search</a></span>
+    </div>
+</form>
+<script>
+window.onload = function() {
+    document.getElementById("s.q").focus();
+}
+</script>
+</form>
