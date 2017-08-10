@@ -57,7 +57,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	// Temporary patch to make Illiad requests work - this is custom to the GVSU install
 	var illiadLink = $j("table.CandyWrapper:last a.AnchorButton:contains('Document Delivery')").attr("href");
 
-
+	var titleEncode = encodeURIComponent($j('.CitationArticleOrSectionTitle').text());
 
 	// ************************************************************************************
 	// DON'T EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING!
@@ -99,47 +99,17 @@ $j(document).ready(function() { // Wait until the original page loads
 	}
 
 	
-	// Set variables from citation
-	if (format === "Journal" || format === "JournalFormat") { // Journals
-		var title = $j(".CitationSource").text().trim(),article = $j(".CitationArticleOrSectionTitle").text().trim(),vol = $j(".CitationVolume").text().trim(),issue = $j(".CitationIssue").text().trim(),date = '&nbsp;'+$j(".CitationDate").text().trim(),pages = ' p.'+$j(".CitationSpageValue").text().trim(),standardno = $j(".CitationISSN").text().trim(),L="an electronic copy",A="1 &#8211; 3 days",O="article",titleEncode = encodeURI(title),resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from ' + illName;
-	}
-	if (format === "BookFormat" || format === "Book") { // Books
-		var title = $j("#CitationBookTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationBookDateValue").text().trim()+').',standardno = $j("td#CitationBookISBNValue").text().trim(),L="this book",A="1 &#8211; 2 weeks",O="book",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
-	}
-	if (format === "Dissertation" || format === "DissertationFormat") { // Dissertations
-		var title = $j("#CitationDissertationTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationDissertationDateValue").text().trim()+').',L="this dissertation",A="1 &#8211; 2 weeks",O="dissertation",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article=''; // Encode the white space in the URL
-	}
-	if (format === "Patent" || format === "PatentFormat") { // Patents
-		var title = $j("#CitationPatentTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationPatentInventorDateValue").text().trim()+').',authorName = $j("td#CitationPatentInventorValue").text().trim(),L="this patent",A="1 &#8211; 2 weeks",O="patent",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
-	}
-	if (format === "UnknownFormat" || format === "Unknown") { // Unknown Format
-		var title = $j("#CitationUnknownPublicationValue").text().trim(),date = '&nbsp;('+$j("#CitationUnknownDateValue").text().trim()+').',standardno=$j("#CitationBookISBNValue").text().trim(),L="this item",A="1 &#8211; 2 weeks",O="item",titleEncode = encodeURI(title),date='',resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
-	}
-
-	// Build OpenURL for document delivery
-	var OpenUrl = 'sid=' + encodeURI(getQueryVariable('rfr_id')) + '&genre='+O+'&aulast='+encodeURI(authorLast)+'&aufirst='+encodeURI(authorFirst)+'&title='+encodeURI(title)+'&date='+encodeURI(	$j(".CitationDate").text().trim());
-	if(format === "Journal" || format === "JournalFormat") {
-		OpenUrl += '&issn='+standardno+'&atitle='+encodeURI($j(".CitationArticleOrSectionTitle").text().trim())+'&volume='+$j(".CitationVolume").text().trim()+'&part=&issue='+$j(".CitationIssue").text().trim();
-	} else {
-		OpenUrl += '&isbn='+standardno+''
-	}
-	OpenUrl += '&spage='+pages.substr(3).replace(".","")+'&epage=';
-
-
 	var newPage = document.createElement('div');
 	newPage.id = 'link-reset-wrapper';
+	
 	var newPageHeader = document.createElement('h2');
 	newPageHeader.style.textAlign = 'left';
 	newPageHeader.innerHTML = 'You are looking for:';
 	newPage.appendChild(newPageHeader);
 
-	
+	// Where is the built-in APA citation format?
 	var citationDiv = document.body.querySelector('div.Citation');
-	/*
-	// Turn this off because we already have APA citation format now
-	citationDiv.id = 'citation';
-	citationDiv.innerHTML = '<span id="citation-author">'+authorName+'.</span><span id="citation-date">' + date + '</span><span id="citation-article">&nbsp;' + article + '</span> <span id="citation-title">' + title + '.</span>' + vol + issue + pages + '&nbsp;<a href="' + refinerlink + '" class="edit-link">[Edit]</a>';
-	*/
+	
 	// Build list element for searching catalog or Google Patents
 	var listOpac = document.createElement('li'),itemType=O;
 	listOpac.id = 'next-step-opac';
