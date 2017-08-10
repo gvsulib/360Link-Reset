@@ -139,7 +139,7 @@ a.SS_DatabaseHyperLink {
 	line-height: 1.5em;
 	padding: 0 1em !important;
 }
-#citation {
+.Citation {
 	margin-bottom: 1.5em;
 }
 .edit-link {
@@ -245,4 +245,3 @@ span#cancel-doc-del {
 #cms-content a { color: #1F65A0; text-decoration: none;}
 a.btn.btn-primary, .btn.btn-primary a { color: #fff !important;}
 a.btn.btn-default, .btn.btn-default a { color: #333 !important; }
-#search-results { margin-top: 1.5em; }
