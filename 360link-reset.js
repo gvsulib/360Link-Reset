@@ -93,7 +93,6 @@ $j(document).ready(function() { // Wait until the original page loads
 	        var pair = vars[i].split('=');
 	        if (decodeURIComponent(pair[0]) == v) {
 	            return decodeURIComponent(pair[1]);
-	console.log(pair[1]);
 	        }
 	    }
 	    console.log('Query variable %s not found', v);
@@ -118,9 +117,9 @@ $j(document).ready(function() { // Wait until the original page loads
 	}
 
 	// Build OpenURL for document delivery
-	var OpenUrl = 'sid=' + encodeURI(getQueryVariable('rfr_id')) + '&genre='+O+'&aulast='+encodeURI(authorLast)+'&aufirst='+encodeURI(authorFirst)+'&title='+encodeURI(title)+'&date='+encodeURI(	$j("#CitationJournalDateValue").text().trim());
+	var OpenUrl = 'sid=' + encodeURI(getQueryVariable('rfr_id')) + '&genre='+O+'&aulast='+encodeURI(authorLast)+'&aufirst='+encodeURI(authorFirst)+'&title='+encodeURI(title)+'&date='+encodeURI(	$j("#CitationDate").text().trim());
 	if(format === "Journal" || format === "JournalFormat") {
-		OpenUrl += '&issn='+standardno+'&atitle='+encodeURI($j("#CitationJournalArticleValue").text().trim())+'&volume='+$j("#CitationJournalVolumeValue").text().trim()+'&part=&issue='+$j("#CitationJournalIssueValue").text().trim();
+		OpenUrl += '&issn='+standardno+'&atitle='+encodeURI($j("#CitationArticleOrSectionTitle").text().trim())+'&volume='+$j("#CitationVolume").text().trim()+'&part=&issue='+$j("#CitationIssue").text().trim();
 	} else {
 		OpenUrl += '&isbn='+standardno+''
 	}
