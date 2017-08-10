@@ -111,7 +111,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	var citationDiv = document.body.querySelector('div.Citation');
 	
 	// Build list element for searching catalog or Google Patents
-	var listOpac = document.createElement('li'),var itemType=O;
+	var listOpac = document.createElement('li'),itemType = 'O';
 	listOpac.id = 'next-step-opac';
 	if(format === "Journal" || format === "JournalFormat") {
 		itemType = 'journal';
