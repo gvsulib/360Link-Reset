@@ -101,7 +101,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	
 	var newPage = document.createElement('div');
 	newPage.id = 'link-reset-wrapper';
-	
+
 	var newPageHeader = document.createElement('h2');
 	newPageHeader.style.textAlign = 'left';
 	newPageHeader.innerHTML = 'You are looking for:';
@@ -111,7 +111,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	var citationDiv = document.body.querySelector('div.Citation');
 	
 	// Build list element for searching catalog or Google Patents
-	var listOpac = document.createElement('li'),itemType=O;
+	var listOpac = document.createElement('li'),var itemType=O;
 	listOpac.id = 'next-step-opac';
 	if(format === "Journal" || format === "JournalFormat") {
 		itemType = 'journal';
