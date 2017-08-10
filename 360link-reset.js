@@ -101,7 +101,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	
 	// Set variables from citation
 	if (format === "Journal" || format === "JournalFormat") { // Journals
-		var title = $j(".CitationSource").text().trim(),article = $j(".CitationArticleOrSectionTitle").text().trim()+'.',vol = ' ('+$j(".CitationVolume").text().trim()+')',issue = $j(".CitationIssue").text().trim()+'.',date = '&nbsp;('+$j(".CitationDate").text().trim()+').',pages = ' p.'+$j(".CitationSPageValue").text().trim()+'.',standardno = $j(".CitationISSN").text().trim(),L="an electronic copy",A="1 &#8211; 3 days",O="article",titleEncode = encodeURI(title),resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from ' + illName;
+		var title = $j(".CitationSource").text().trim(),article = $j(".CitationArticleOrSectionTitle").text().trim()+'.',vol = $j(".CitationVolume").text().trim(),issue = $j(".CitationIssue").text().trim()+'.',date = '&nbsp;'+$j(".CitationDate").text().trim()+,pages = ' p.'+$j(".CitationSpageValue").text().trim()+,standardno = $j(".CitationISSN").text().trim(),L="an electronic copy",A="1 &#8211; 3 days",O="article",titleEncode = encodeURI(title),resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from ' + illName;
 	}
 	if (format === "BookFormat" || format === "Book") { // Books
 		var title = $j("#CitationBookTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationBookDateValue").text().trim()+').',standardno = $j("td#CitationBookISBNValue").text().trim(),L="this book",A="1 &#8211; 2 weeks",O="book",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
@@ -133,10 +133,12 @@ $j(document).ready(function() { // Wait until the original page loads
 	newPageHeader.innerHTML = 'You are looking for:';
 	newPage.appendChild(newPageHeader);
 
+	/*
+	// Turn this off because we already have APA citation format now
 	var citationDiv = document.createElement('div');
 	citationDiv.id = 'citation';
 	citationDiv.innerHTML = '<span id="citation-author">'+authorName+'.</span><span id="citation-date">' + date + '</span><span id="citation-article">&nbsp;' + article + '</span> <span id="citation-title">' + title + '.</span>' + vol + issue + pages + '&nbsp;<a href="' + refinerlink + '" class="edit-link">[Edit]</a>';
-
+	*/
 	// Build list element for searching catalog or Google Patents
 	var listOpac = document.createElement('li'),itemType=O;
 	listOpac.id = 'next-step-opac';
