@@ -102,7 +102,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	
 	// Set variables from citation
 	if (format === "Journal" || format === "JournalFormat") { // Journals
-		var title = $j("#CitationJournalTitleValue").text().trim(),article = $j("#CitationJournalArticleValue").text().trim()+'.',vol = ' ('+$j("#CitationJournalVolumeValue").text().trim()+')',issue = $j("#CitationJournalIssueValue").text().trim()+'.',date = '&nbsp;('+$j("#CitationJournalDateValue").text().trim()+').',pages = ' p.'+$j("#CitationJournalPageValue").text().trim()+'.',standardno = $j("#CitationJournalIssnValue").text().trim(),L="an electronic copy",A="1 &#8211; 3 days",O="article",titleEncode = encodeURI(title),resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from ' + illName;
+		var title = $j("#CitationSource").text().trim(),article = $j("#CitationArticleOrSectionTitle").text().trim()+'.',vol = ' ('+$j("#CitationVolume").text().trim()+')',issue = $j("#CitationIssue").text().trim()+'.',date = '&nbsp;('+$j("#CitationDate").text().trim()+').',pages = ' p.'+$j("#CitationSPageValue").text().trim()+'.',standardno = $j("#CitationISSN").text().trim(),L="an electronic copy",A="1 &#8211; 3 days",O="article",titleEncode = encodeURI(title),resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from ' + illName;
 	}
 	if (format === "BookFormat" || format === "Book") { // Books
 		var title = $j("#CitationBookTitleValue").text().trim(),date = '&nbsp;('+$j("#CitationBookDateValue").text().trim()+').',standardno = $j("td#CitationBookISBNValue").text().trim(),L="this book",A="1 &#8211; 2 weeks",O="book",titleEncode = encodeURI(title),resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
