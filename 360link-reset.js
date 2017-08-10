@@ -134,7 +134,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	newPage.appendChild(newPageHeader);
 
 	
-	var citationDiv = $j('div.Citation');
+	var citationDiv = document.body.querySelector('div.Citation');
 	/*
 	// Turn this off because we already have APA citation format now
 	citationDiv.id = 'citation';
