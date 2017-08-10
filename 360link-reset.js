@@ -133,9 +133,10 @@ $j(document).ready(function() { // Wait until the original page loads
 	newPageHeader.innerHTML = 'You are looking for:';
 	newPage.appendChild(newPageHeader);
 
+	
+	var citationDiv = $j('div.Citation');
 	/*
 	// Turn this off because we already have APA citation format now
-	var citationDiv = document.createElement('div');
 	citationDiv.id = 'citation';
 	citationDiv.innerHTML = '<span id="citation-author">'+authorName+'.</span><span id="citation-date">' + date + '</span><span id="citation-article">&nbsp;' + article + '</span> <span id="citation-title">' + title + '.</span>' + vol + issue + pages + '&nbsp;<a href="' + refinerlink + '" class="edit-link">[Edit]</a>';
 	*/
