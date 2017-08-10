@@ -99,9 +99,25 @@ $j(document).ready(function() { // Wait until the original page loads
 	}
 
 	
+	// Set variables from citation
+	if (format === "Journal" || format === "JournalFormat") { // Journals
+		var L="an electronic copy",A="1 &#8211; 3 days",O="article",resultsTable=$j("#JournalLinkTable"),illLabel='Order a copy from ' + illName;
+	}
+	if (format === "BookFormat" || format === "Book") { // Books
+		var L="this book",A="1 &#8211; 2 weeks",O="book",resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article='';
+	}
+	if (format === "Dissertation" || format === "DissertationFormat") { // Dissertations
+		var L="this dissertation",A="1 &#8211; 2 weeks",O="dissertation",resultsTable=$j("#BookLinkTable"),vol='',issue='',pages='',article=''; // Encode the white space in the URL
+	}
+	if (format === "Patent" || format === "PatentFormat") { // Patents
+		var L="this patent",A="1 &#8211; 2 weeks",O = "patent",resultsTable=$j("#BookLinkTable");
+	}
+	if (format === "UnknownFormat" || format === "Unknown") { // Unknown Format
+		var L="this item",A="1 &#8211; 2 weeks",O="item",resultsTable=$j("#BookLinkTable");
+	}
+
 	var newPage = document.createElement('div');
 	newPage.id = 'link-reset-wrapper';
-
 	var newPageHeader = document.createElement('h2');
 	newPageHeader.style.textAlign = 'left';
 	newPageHeader.innerHTML = 'You are looking for:';
@@ -111,7 +127,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	var citationDiv = document.body.querySelector('div.Citation');
 	
 	// Build list element for searching catalog or Google Patents
-	var listOpac = document.createElement('li'),itemType = 'O';
+	var listOpac = document.createElement('li'),itemType=O;
 	listOpac.id = 'next-step-opac';
 	if(format === "Journal" || format === "JournalFormat") {
 		itemType = 'journal';
