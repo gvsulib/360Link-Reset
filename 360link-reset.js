@@ -15,6 +15,15 @@ window.$j = jQuery.noConflict();
 
 $j(document).ready(function() { // Wait until the original page loads
 
+	// First, let's standardize the format types
+		if(format.indexOf('Format') > 0) {
+			formatType = format.split('Format');
+			itemType = formatType[0];
+		} else {
+			itemType = format;
+		}
+		console.log('This is a ' + itemType);
+
 	// ************************************************************************************
 	// Define your institution's local variables here
 	// ************************************************************************************
@@ -57,7 +66,14 @@ $j(document).ready(function() { // Wait until the original page loads
 	// Temporary patch to make Illiad requests work - this is custom to the GVSU install
 	var illiadLink = $j("table.CandyWrapper:last a.AnchorButton:contains('Document Delivery')").attr("href");
 
-	var titleEncode = encodeURIComponent($j('.CitationArticleOrSectionTitle').text());
+	if(itemType == 'Book') {
+		var titleEncode = encodeURIComponent($j('.CitationSource').text());
+	} else {
+		var titleEncode = encodeURIComponent($j('.CitationArticleOrSectionTitle').text());
+	}
+
+	console.log('The title is: ' + titleEncode);
+	
 
 	// ************************************************************************************
 	// DON'T EDIT BELOW THIS LINE UNLESS YOU KNOW WHAT YOU ARE DOING!
