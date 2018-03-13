@@ -66,7 +66,7 @@ $j(document).ready(function() { // Wait until the original page loads
 	// Temporary patch to make Illiad requests work - this is custom to the GVSU install
 	var illiadLink = $j("table.CandyWrapper:last a.AnchorButton:contains('Document Delivery')").attr("href");
 
-	if(itemType == 'Book') {
+	if((itemType == 'Book') || (itemType == 'Dissertation')) {
 		var titleEncode = encodeURIComponent($j('.CitationSource').text());
 	} else {
 		var titleEncode = encodeURIComponent($j('.CitationArticleOrSectionTitle').text());
